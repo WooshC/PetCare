@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<h2>Iniciar Sesión</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form method="post">
+    <div class="form-group">
+        <label>Email</label>
+        <input name="email" class="form-control" type="email" required />
+    </div>
+    <div class="form-group">
+        <label>Contraseña</label>
+        <input name="password" class="form-control" type="password" required />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Ingresar</button>
+</form>

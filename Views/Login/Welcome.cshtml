@@ -1,0 +1,14 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Bienvenido";
+}
+
+<h2>Bienvenido, @Model.NombreCompleto</h2>
+
+<div class="card p-3">
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Teléfono:</strong> @Model.Telefono</p>
+    <p><strong>Dirección:</strong> @Model.Direccion</p>
+    <p><strong>Rol(es):</strong> @string.Join(", ", Model.Roles)</p>
+</div>

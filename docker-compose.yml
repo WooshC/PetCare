@@ -1,0 +1,43 @@
+﻿version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "TuPassword123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "14333:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+    networks:
+      - sqlnet
+
+  db-init:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: db-init
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./init:/init
+    entrypoint: >
+      bash -c "
+        echo 'Esperando a que SQL Server esté listo…';
+        until /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'TuPassword123!' -Q 'SELECT 1' &> /dev/null
+        do
+          echo '  aún no responde, reintentando en 5s…';
+          sleep 5;
+        done;
+        echo 'Conexión establecida. Ejecutando init.sql…';
+        /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'TuPassword123!' -i /init/init.sql;
+        echo 'Script ejecutado con éxito.'"
+    networks:
+      - sqlnet
+
+volumes:
+  sqlserverdata:
+
+networks:
+  sqlnet:
