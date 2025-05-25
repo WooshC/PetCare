@@ -1,20 +1,16 @@
-# ?? PetCare - Sistema de GestiÛn de Cuidado de Mascotas
+# PetCare - Sistema de Gesti√≥n de Cuidado de Mascotas
 
-Bienvenido a **PetCare**, una aplicaciÛn web construida con ASP.NET Core MVC, Entity Framework Core y SQL Server. Este sistema permite gestionar la autenticaciÛn de usuarios con roles predefinidos.
+Bienvenido a **PetCare**, una aplicaci√≥n web construida con ASP.NET Core MVC, Entity Framework Core y SQL Server. Este sistema permite gestionar la autenticaci√≥n de usuarios con roles predefinidos.
 
 ---
 
-## ?? InstalaciÛn y EjecuciÛn del Proyecto
+##  Instalaci√≥n y Ejecuci√≥n del Proyecto
 
-### 1 Clonar el repositorio
+### Clonar el repositorio
 
-Puedes clonar el proyecto usando **GitHub Desktop** o por lÌnea de comandos:
+Puedes clonar el proyecto usando **GitHub Desktop** o por l√≠nea de comandos:
 
-```bash
-git clone https://github.com/tu-usuario/petcare.git
-cd petcare
-
-2?? Instalar los paquetes NuGet
+#### Instalar los paquetes NuGet
 Abre el proyecto en Visual Studio 2022, abre la Consola del Administrador de Paquetes y ejecuta los siguientes comandos uno por uno:
 
 powershell
@@ -22,50 +18,48 @@ Install-Package Microsoft.EntityFrameworkCore.SqlServer
 Install-Package Microsoft.EntityFrameworkCore.Tools
 Install-Package Microsoft.AspNetCore.SignalR
 Install-Package Microsoft.AspNetCore.SignalR.Client
-3?? Configurar y levantar la base de datos con Docker
-Si tienes Docker instalado, abre el proyecto en Visual Studio Code o una terminal en la raÌz del proyecto y ejecuta:
+##### Configurar y levantar la base de datos con Docker
+Si tienes Docker instalado, abre el proyecto en Visual Studio Code o una terminal en la ra√≠z del proyecto y ejecuta:
 
 bash
 Copiar
 Editar
 docker compose up
-?? En caso de que quieras eliminar contenedores anteriores o evitar conflictos de nombres:
+# En caso de que quieras eliminar contenedores anteriores o evitar conflictos de nombres:
 
 bash
 Copiar
 Editar
 docker compose down
-4?? Ejecutar el proyecto
+#### Ejecutar el proyecto
 Una vez levantado Docker y agregados los paquetes NuGet, vuelve a Visual Studio 2022 y:
 
-Aseg˙rate de que la base de datos est· conectada.
+Aseg√∫rate de que la base de datos est√° conectada.
 
 Ejecuta el proyecto (F5 o haz clic en "Iniciar").
 
-Se abrir· el navegador en la ruta /Login.
+Se abrir√° el navegador en la ruta /Login.
 
-? Credenciales de acceso
-Puedes iniciar sesiÛn con las siguientes credenciales predeterminadas:
+# Credenciales de acceso
+Puedes iniciar sesi√≥n con las siguientes credenciales predeterminadas:
 
-text
-Copiar
-Editar
-?? Email:    admin@petcare.com
-?? ContraseÒa: admin
-Estas credenciales corresponden al usuario Administrador creado autom·ticamente en la base de datos con datos semilla.
 
-?? Estructura del Proyecto
+Email:admin@petcare.com
+Contrase√±a: admin
+Estas credenciales corresponden al usuario Administrador creado autom√°ticamente en la base de datos con datos semilla.
+
+# Estructura del Proyecto
 Controllers/ - Controlador MVC para login (LoginController)
 
-Views/Login/ - Vistas Razor para autenticaciÛn y bienvenida
+Views/Login/ - Vistas Razor para autenticaci√≥n y bienvenida
 
 Models/ - Entidades: Usuario, Rol, UsuarioRol
 
-Data/ApplicationDbContext.cs - ConfiguraciÛn de EF Core y datos iniciales
+Data/ApplicationDbContext.cs - Configuraci√≥n de EF Core y datos iniciales
 
-docker-compose.yml - Archivo de configuraciÛn para levantar SQL Server con Docker
+docker-compose.yml - Archivo de configuraci√≥n para levantar SQL Server con Docker
 
-?? Requisitos
+# Requisitos
 .NET 6 o superior
 
 Visual Studio 2022
@@ -76,13 +70,13 @@ SQL Server (si no usas Docker)
 
 Git
 
-? Funcionalidades actuales
- AutenticaciÛn de usuarios con verificaciÛn de correo y contraseÒa
+# Funcionalidades actuales
+ Autenticaci√≥n de usuarios con verificaci√≥n de correo y contrase√±a
 
- VisualizaciÛn de datos b·sicos del usuario tras el login
+ Visualizaci√≥n de datos b√°sicos del usuario tras el login
 
-????? Contribuciones
-°Las contribuciones son bienvenidas! Puedes hacer un fork del repositorio y enviar un pull request con mejoras, correcciones o nuevas funcionalidades.
+### Contribuciones
+¬°Las contribuciones son bienvenidas! Puedes hacer un fork del repositorio y enviar un pull request con mejoras, correcciones o nuevas funcionalidades.
 
-?? Licencia
-Este proyecto est· bajo licencia MIT. Puedes usarlo, modificarlo y distribuirlo libremente.
+# Licencia
+Este proyecto est√° bajo licencia MIT. Puedes usarlo, modificarlo y distribuirlo libremente.
