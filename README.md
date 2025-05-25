@@ -14,22 +14,18 @@ Puedes clonar el proyecto usando **GitHub Desktop** o por línea de comandos:
 Abre el proyecto en Visual Studio 2022, abre la Consola del Administrador de Paquetes y ejecuta los siguientes comandos uno por uno:
 
 powershell
-Install-Package Microsoft.EntityFrameworkCore.SqlServer
+Install-Package Microsoft.EntityFrameworkCore.SqlServer 
+
 Install-Package Microsoft.EntityFrameworkCore.Tools
+
 Install-Package Microsoft.AspNetCore.SignalR
+
 Install-Package Microsoft.AspNetCore.SignalR.Client
+
 ##### Configurar y levantar la base de datos con Docker
 Si tienes Docker instalado, abre el proyecto en Visual Studio Code o una terminal en la raíz del proyecto y ejecuta:
-
-bash
-Copiar
-Editar
 docker compose up
 # En caso de que quieras eliminar contenedores anteriores o evitar conflictos de nombres:
-
-bash
-Copiar
-Editar
 docker compose down
 #### Ejecutar el proyecto
 Una vez levantado Docker y agregados los paquetes NuGet, vuelve a Visual Studio 2022 y:
