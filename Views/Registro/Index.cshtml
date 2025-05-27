@@ -1,0 +1,138 @@
+﻿@model PetCare.Controllers.RegistroViewModel
+
+@{
+    ViewData["Title"] = "Registro de Usuario";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center">@ViewData["Title"]</h2>
+
+        <form asp-action="Index" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="NombreCompleto" class="control-label"></label>
+                        <input asp-for="NombreCompleto" class="form-control" />
+                        <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="NombreUsuario" class="control-label"></label>
+                        <input asp-for="NombreUsuario" class="form-control" />
+                        <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" type="password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Telefono" class="control-label"></label>
+                        <input asp-for="Telefono" class="form-control" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TipoUsuario" class="control-label"></label>
+                <select asp-for="TipoUsuario" class="form-control" id="tipoUsuarioSelect">
+                    <option value="Cliente">Cliente</option>
+                    <option value="Cuidador">Cuidador</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DocumentoIdentidad" class="control-label"></label>
+                <input asp-for="DocumentoIdentidad" class="form-control" />
+                <span asp-validation-for="DocumentoIdentidad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DocumentoIdentidadArchivo" class="control-label"></label>
+                <input asp-for="DocumentoIdentidadArchivo" type="file" class="form-control" />
+                <span asp-validation-for="DocumentoIdentidadArchivo" class="text-danger"></span>
+                <small class="form-text text-muted">Suba una copia de su documento de identidad</small>
+            </div>
+
+            <div id="cuidadorFields" style="display: none;">
+                <div class="form-group">
+                    <label asp-for="TelefonoEmergencia" class="control-label"></label>
+                    <input asp-for="TelefonoEmergencia" class="form-control" />
+                    <span asp-validation-for="TelefonoEmergencia" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ComprobanteServiciosArchivo" class="control-label"></label>
+                    <input asp-for="ComprobanteServiciosArchivo" type="file" class="form-control" />
+                    <small class="form-text text-muted">Suba un comprobante de servicios previos (factura, contrato, etc.)</small>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Biografia" class="control-label"></label>
+                    <textarea asp-for="Biografia" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Experiencia" class="control-label"></label>
+                    <textarea asp-for="Experiencia" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TarifaPorHora" class="control-label"></label>
+                    <input asp-for="TarifaPorHora" type="number" step="0.01" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.getElementById('tipoUsuarioSelect').addEventListener('change', function() {
+            if (this.value === 'Cuidador') {
+                document.getElementById('cuidadorFields').style.display = 'block';
+            } else {
+                document.getElementById('cuidadorFields').style.display = 'none';
+            }
+        });
+
+        // Mostrar campos correctos al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('tipoUsuarioSelect').dispatchEvent(new Event('change'));
+        });
+    </script>
+}

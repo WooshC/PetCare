@@ -10,10 +10,13 @@ namespace PetCare.Data
         {
         }
 
-        // Solo las tablas básicas para login y administración
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
         public DbSet<UsuarioRol> UsuarioRoles { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Cuidador> Cuidadores { get; set; }
+        public DbSet<DocumentoVerificacion> DocumentosVerificacion { get; set; }
+        public DbSet<Calificacion> Calificaciones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +47,43 @@ namespace PetCare.Data
                 entity.Property(ur => ur.FechaAsignacion).HasDefaultValueSql("GETDATE()");
             });
 
+            // Configuración de Cliente
+            modelBuilder.Entity<Cliente>(entity =>
+            {
+                entity.HasOne(c => c.Usuario)
+                      .WithOne(u => u.Cliente)
+                      .HasForeignKey<Cliente>(c => c.UsuarioID);
+            });
+
+            // Configuración de Cuidador
+            modelBuilder.Entity<Cuidador>(entity =>
+            {
+                entity.HasOne(c => c.Usuario)
+                      .WithOne(u => u.Cuidador)
+                      .HasForeignKey<Cuidador>(c => c.UsuarioID);
+
+   
+                entity.Property(c => c.TarifaPorHora).HasPrecision(10, 2);
+                entity.Property(c => c.CalificacionPromedio).HasPrecision(3, 2);
+            });
+
+
+            // Configuración de Calificacion
+            modelBuilder.Entity<Calificacion>(entity =>
+            {
+                entity.HasOne(c => c.Cuidador)
+                      .WithMany(c => c.CalificacionesRecibidas)
+                      .HasForeignKey(c => c.CuidadorID)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(c => c.Cliente)
+                      .WithMany(c => c.CalificacionesRealizadas)
+                      .HasForeignKey(c => c.ClienteID)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(c => c.FechaCalificacion).HasDefaultValueSql("GETDATE()");
+            });
+
             // Datos iniciales
             modelBuilder.Entity<Rol>().HasData(
                 new Rol { RolID = 1, NombreRol = "Administrador", Descripcion = "Acceso completo al sistema" },
@@ -56,12 +96,13 @@ namespace PetCare.Data
                 {
                     UsuarioID = 1,
                     NombreUsuario = "admin",
-                    ContrasenaHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", // SHA256 de 'admin'
+                    ContrasenaHash = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
                     Email = "admin@petcare.com",
                     NombreCompleto = "Administrador del Sistema",
                     Telefono = "0998887777",
                     Direccion = "Calle Principal 123",
-                    Activo = true
+                    Activo = true,
+                    FechaRegistro = new DateTime(2024, 01, 01, 0, 0, 0)
                 }
             );
 

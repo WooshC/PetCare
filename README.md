@@ -1,3 +1,4 @@
+
 # PetCare - Sistema de Gestión de Cuidado de Mascotas
 
 Bienvenido a **PetCare**, una aplicación web construida con ASP.NET Core MVC, Entity Framework Core y SQL Server. Este sistema permite gestionar la autenticación de usuarios con roles predefinidos.
@@ -6,7 +7,9 @@ Bienvenido a **PetCare**, una aplicación web construida con ASP.NET Core MVC, E
 
 ##  Instalación y Ejecución del Proyecto
 
+
 ### Clonar el repositorio
+
 
 Puedes clonar el proyecto usando **GitHub Desktop** o por línea de comandos:
 
@@ -44,8 +47,10 @@ Email:admin@petcare.com
 Contraseña: admin
 Estas credenciales corresponden al usuario Administrador creado automáticamente en la base de datos con datos semilla.
 
+
 # Estructura del Proyecto
 Controllers/ - Controlador MVC para login (LoginController)
+
 
 Views/Login/ - Vistas Razor para autenticación y bienvenida
 
@@ -54,6 +59,7 @@ Models/ - Entidades: Usuario, Rol, UsuarioRol
 Data/ApplicationDbContext.cs - Configuración de EF Core y datos iniciales
 
 docker-compose.yml - Archivo de configuración para levantar SQL Server con Docker
+
 
 # Requisitos
 .NET 6 o superior
@@ -66,6 +72,7 @@ SQL Server (si no usas Docker)
 
 Git
 
+
 # Funcionalidades actuales
  Autenticación de usuarios con verificación de correo y contraseña
 
@@ -76,3 +83,4 @@ Git
 
 # Licencia
 Este proyecto está bajo licencia MIT. Puedes usarlo, modificarlo y distribuirlo libremente.
+
