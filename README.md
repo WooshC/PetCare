@@ -54,7 +54,9 @@ Puedes iniciar sesión con las siguientes credenciales predeterminadas:
 
 
 Email:admin@petcare.com
+
 Contraseña: admin
+
 Estas credenciales corresponden al usuario Administrador creado automáticamente en la base de datos con datos semilla.
 
 
