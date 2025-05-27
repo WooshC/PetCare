@@ -17,6 +17,7 @@ Puedes clonar el proyecto usando **GitHub Desktop** o por línea de comandos:
 Abre el proyecto en Visual Studio 2022, abre la Consola del Administrador de Paquetes y ejecuta los siguientes comandos uno por uno:
 
 powershell
+
 Install-Package Microsoft.EntityFrameworkCore.SqlServer 
 
 Install-Package Microsoft.EntityFrameworkCore.Tools
@@ -24,6 +25,8 @@ Install-Package Microsoft.EntityFrameworkCore.Tools
 Install-Package Microsoft.AspNetCore.SignalR
 
 Install-Package Microsoft.AspNetCore.SignalR.Client
+
+dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 ##### Configurar y levantar la base de datos con Docker
 Si tienes Docker instalado, abre el proyecto en Visual Studio Code o una terminal en la raíz del proyecto y ejecuta:
@@ -34,6 +37,13 @@ docker compose down
 Una vez levantado Docker y agregados los paquetes NuGet, vuelve a Visual Studio 2022 y:
 
 Asegúrate de que la base de datos está conectada.
+
+Ejecuta la migración ingresando a la consola en Herramientas > Administrador de Paquetes Nuget > Consola de administrador de paquetes
+
+
+![image](https://github.com/user-attachments/assets/971a9ae5-cab8-491a-8716-e5b7a7a89fdc)
+
+y ejecuta el siguiente comando: Update-Database
 
 Ejecuta el proyecto (F5 o haz clic en "Iniciar").
 
@@ -52,9 +62,9 @@ Estas credenciales corresponden al usuario Administrador creado automáticamente
 Controllers/ - Controlador MVC para login (LoginController)
 
 
-Views/Login/ - Vistas Razor para autenticación y bienvenida
+Views/Login/ - Vistas Blazor para autenticación y bienvenida
 
-Models/ - Entidades: Usuario, Rol, UsuarioRol
+Models/ - Entidades: Usuario, Rol, UsuarioRol, Cuidador, Calificación, Cliente, Documento Verificaicon, 
 
 Data/ApplicationDbContext.cs - Configuración de EF Core y datos iniciales
 
@@ -77,6 +87,8 @@ Git
  Autenticación de usuarios con verificación de correo y contraseña
 
  Visualización de datos básicos del usuario tras el login
+
+ Registro de usuarios
 
 ### Contribuciones
 ¡Las contribuciones son bienvenidas! Puedes hacer un fork del repositorio y enviar un pull request con mejoras, correcciones o nuevas funcionalidades.
