@@ -69,3 +69,62 @@ GO
 -- Asignar rol de administrador
 INSERT INTO UsuarioRoles (UsuarioID, RolID) VALUES (1, 1);
 GO
+
+
+USE BDD_PETCARE;
+GO
+
+-- Tabla para información específica de Clientes
+CREATE TABLE Clientes (
+    ClienteID INT IDENTITY(1,1) PRIMARY KEY,
+    UsuarioID INT NOT NULL FOREIGN KEY REFERENCES Usuarios(UsuarioID),
+    DocumentoIdentidad VARCHAR(20) NOT NULL,
+    DocumentoIdentidadArchivo VARBINARY(MAX),
+    DocumentoVerificado BIT DEFAULT 0,
+    FechaVerificacion DATETIME,
+    CONSTRAINT UQ_Cliente_Usuario UNIQUE (UsuarioID)
+);
+GO
+
+-- Tabla para información específica de Cuidadores
+CREATE TABLE Cuidadores (
+    CuidadorID INT IDENTITY(1,1) PRIMARY KEY,
+    UsuarioID INT NOT NULL FOREIGN KEY REFERENCES Usuarios(UsuarioID),
+    DocumentoIdentidad VARCHAR(20) NOT NULL,
+    DocumentoIdentidadArchivo VARBINARY(MAX),
+    ComprobanteServiciosArchivo VARBINARY(MAX),
+    TelefonoEmergencia VARCHAR(15) NOT NULL,
+    Biografia TEXT,
+    Experiencia TEXT,
+    HorarioAtencion VARCHAR(100),
+    TarifaPorHora DECIMAL(10,2),
+    CalificacionPromedio DECIMAL(3,2) DEFAULT 0.0,
+    DocumentoVerificado BIT DEFAULT 0,
+    FechaVerificacion DATETIME,
+    CONSTRAINT UQ_Cuidador_Usuario UNIQUE (UsuarioID)
+);
+GO
+
+-- Tabla para documentos de verificación (opcional, puede usarse en lugar de campos en las tablas anteriores)
+CREATE TABLE DocumentosVerificacion (
+    DocumentoID INT IDENTITY(1,1) PRIMARY KEY,
+    UsuarioID INT NOT NULL FOREIGN KEY REFERENCES Usuarios(UsuarioID),
+    TipoDocumento VARCHAR(50) NOT NULL, -- 'Cedula', 'ComprobanteServicio', etc.
+    Archivo VARBINARY(MAX) NOT NULL,
+    FechaSubida DATETIME DEFAULT GETDATE(),
+    Estado VARCHAR(20) DEFAULT 'Pendiente', -- 'Aprobado', 'Rechazado'
+    Comentarios TEXT,
+    FechaVerificacion DATETIME
+);
+GO
+
+-- Tabla para calificaciones a cuidadores
+CREATE TABLE Calificaciones (
+    CalificacionID INT IDENTITY(1,1) PRIMARY KEY,
+    CuidadorID INT NOT NULL FOREIGN KEY REFERENCES Cuidadores(CuidadorID),
+    ClienteID INT NOT NULL FOREIGN KEY REFERENCES Clientes(ClienteID),
+    Puntuacion INT NOT NULL CHECK (Puntuacion BETWEEN 1 AND 5),
+    Comentario TEXT,
+    FechaCalificacion DATETIME DEFAULT GETDATE()
+);
+GO

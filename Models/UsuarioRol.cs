@@ -7,7 +7,7 @@ namespace PetCare.Models
         public int UsuarioRolID { get; set; }
         public int UsuarioID { get; set; }
         public int RolID { get; set; }
-        public DateTime FechaAsignacion { get; set; } = DateTime.Now;
+        public DateTime FechaAsignacion { get; set; }
 
         // Propiedades de navegación
         public Usuario Usuario { get; set; }
