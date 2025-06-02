@@ -1,0 +1,58 @@
+﻿/* wwwroot/css/PetCare.styles.css */
+
+/* ===== Header / Navbar ===== */
+.navbar-custom {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+    .navbar-custom .logo {
+        height: 32px;
+    }
+
+    .navbar-custom .nav-link {
+        margin: 0 1rem;
+        color: #444;
+        font-weight: 500;
+    }
+
+        .navbar-custom .nav-link:hover {
+            color: #693666;
+        }
+
+.btn-nova {
+    background-color: #fbbd12;
+    color: #333;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 0.45rem 1.2rem;
+}
+
+    .btn-nova:hover {
+        background-color: #e0a50f;
+        color: #fff;
+    }
+
+/* ===== Footer oscuro ===== */
+.footer-dark {
+    background-color: #222;
+    color: #bbb;
+}
+
+    .footer-dark a {
+        color: #bbb;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+        .footer-dark a:hover {
+            color: #fff;
+        }
+
+.logo-footer {
+    height: 28px;
+}
+
+.text-light {
+    color: #f8f9fa !important;
+}

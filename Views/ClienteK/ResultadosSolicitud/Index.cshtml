@@ -1,0 +1,67 @@
+﻿@{
+    Layout = "_Layout";  // tu layout principal
+}
+
+<h2>Resultados de Solicitud</h2>
+
+<p>Aquí irán los resultados reales cuando agreguemos modelo. Por ahora, simulamos 3 cuidadores.</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Tarifa (hora)</th>
+            <th>Ubicación</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>María Pérez</td>
+            <td>$15</td>
+            <td>Quito</td>
+            <td>
+                <a asp-controller="ResultadosSolicitud"
+                   asp-action="Detalle"
+                   asp-route-id="1"
+                   class="btn btn-sm btn-primary">
+                    Ver detalle
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Carlos Sánchez</td>
+            <td>$12</td>
+            <td>Guayaquil</td>
+            <td>
+                <a asp-controller="ResultadosSolicitud"
+                   asp-action="Detalle"
+                   asp-route-id="2"
+                   class="btn btn-sm btn-primary">
+                    Ver detalle
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Ana Gómez</td>
+            <td>$18</td>
+            <td>Cuenca</td>
+            <td>
+                <a asp-controller="ResultadosSolicitud"
+                   asp-action="Detalle"
+                   asp-route-id="3"
+                   class="btn btn-sm btn-primary">
+                    Ver detalle
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    <a asp-controller="Buscador"
+       asp-action="Index"
+       class="btn btn-secondary">
+        ← Volver a buscar
+    </a>
+</p>

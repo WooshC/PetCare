@@ -1,49 +1,97 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@* Views/Shared/_Layout.cshtml *@
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - PetCare</title>
+
+    <!-- CSS globales -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PetCare.styles.css" asp-append-version="true" />
+
+    @* Sección para CSS específico de cada vista *@
+    @RenderSection("Styles", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PetCare</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+<body class="d-flex flex-column min-vh-100">
+    <!-- ===== HEADER PetCare ===== -->
+    <header class="navbar-custom">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between py-2">
+                <!-- Logo + nombre -->
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo-petcare.png" alt="PetCare" class="logo" />
+                    <span class="ms-2">PetCare</span>
+                </a>
+
+                <!-- Menú principal -->
+                <nav class="d-none d-md-flex align-items-center">
+                    <a asp-controller="Home" asp-action="Index" class="nav-link">Inicio</a>
+                    <a asp-controller="Solicitud" asp-action="MisSolicitudes" class="nav-link">Mis solicitudes</a>
+                    <a asp-controller="Chat" asp-action="Index" class="nav-link">Chats</a>
+                </nav>
+
+                <!-- Botón “Nueva solicitud” -->
+                <a asp-controller="Solicitud" asp-action="NuevaSolicitud" class="btn btn-nova">
+                    Nueva solicitud
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== CONTENIDO DINÁMICO ===== -->
+    <main role="main" class="flex-grow-1">
+        <div class="container mt-4">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- ===== FOOTER PetCare ===== -->
+    <footer class="footer-dark mt-auto">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Columna izquierda: Logo y texto -->
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="~/images/logo-petcare-footer.png" alt="PetCare" class="logo-footer" />
+                        <span class="ms-2 text-light">PetCare</span>
+                    </div>
+                    <p class="text-light small">
+                        Un servicio confiable de cuidado de mascotas que conecta dueños y cuidadores profesionales.
+                    </p>
+                </div>
+                <!-- Columna derecha: Enlaces a Servicios -->
+                <div class="col-md-6 mb-3">
+                    <h5 class="text-light">Servicios</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a asp-controller="Servicios" asp-action="Paseo"
+                               class="text-light text-decoration-none">
+                                Paseo
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li>
+                            <a asp-controller="Servicios" asp-action="CuidadoHospedaje"
+                               class="text-light text-decoration-none">
+                                Cuidado y hospedaje
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - PetCare - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="text-center mt-3">
+                <small class="text-secondary">© 2025 PetCare – Todos los derechos reservados.</small>
+            </div>
         </div>
     </footer>
+
+    <!-- JS globales -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    @* Sección para scripts específicos de cada vista *@
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
