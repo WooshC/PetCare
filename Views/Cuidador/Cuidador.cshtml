@@ -1,0 +1,247 @@
+﻿@{
+    ViewData["Title"] = "Perfil Cuidador";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Columna izquierda (info perfil) -->
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                         class="rounded-circle mb-3" width="150" alt="Foto perfil">
+                    <h4>@User.Identity.Name</h4>
+                    <p class="text-muted">Cuidador profesional</p>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary">Editar perfil</button>
+                    </div>
+
+                    <hr>
+
+                    <div class="text-start">
+                        <p><strong>Servicios:</strong></p>
+                        <ul>
+                            <li>Paseos</li>
+                            <li>Guardería</li>
+                            <li>Visitas a domicilio</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna central (contenido principal) -->
+        <div class="col-md-9">
+            <!-- Solicitudes pendientes -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-bell-fill"></i> Solicitudes pendientes
+                </div>
+                <div class="card-body">
+                    <!-- Solicitud 1 - Con acordeón -->
+                    <div class="alert alert-info">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Juan Pérez</strong> te solicitó para pasear a su perro
+                                <div class="text-muted small">2 horas - $20.000</div>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-primary"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#detalleSolicitud1">
+                                    Ver Detalle
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Detalle de la solicitud (acordeón) -->
+                        <div class="collapse mt-3" id="detalleSolicitud1">
+                            <div class="card card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Tipo de servicio:</strong> Paseo</p>
+                                        <p><strong>Duración:</strong> 2 horas</p>
+                                        <p><strong>Fecha:</strong> 15 Junio 2025</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Hora:</strong> 3:00 PM</p>
+                                        <p><strong>Ubicación:</strong> Parque Central</p>
+                                        <p><strong>Pago:</strong> $20.000</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <h5>Descripción:</h5>
+                                    <div class="alert alert-light">
+                                        <p>Necesito que pasees a mi perro Max, es un golden retriever de 2 años.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <button class="btn btn-danger">
+                                        <i class="bi bi-x-circle"></i> Rechazar
+                                    </button>
+                                    <button class="btn btn-success">
+                                        <i class="bi bi-check-circle"></i> Aceptar
+                                    </button>
+                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chatModal">
+                                        <i class="bi bi-chat-left-text"></i> Chat
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solicitud 2 - Con acordeón -->
+                    <div class="alert alert-info">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>María Gómez</strong> necesita cuidado para su gato
+                                <div class="text-muted small">3 días - $150.000</div>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-primary"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#detalleSolicitud2">
+                                    Ver Detalle
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Detalle de la solicitud (acordeón) -->
+                        <div class="collapse mt-3" id="detalleSolicitud2">
+                            <div class="card card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Tipo de servicio:</strong> Guardería</p>
+                                        <p><strong>Duración:</strong> 3 días</p>
+                                        <p><strong>Fecha:</strong> 20-23 Junio 2025</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Hora recogida:</strong> 9:00 AM</p>
+                                        <p><strong>Ubicación:</strong> Carrera 45 #12-34</p>
+                                        <p><strong>Pago:</strong> $150.000</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <h5>Descripción:</h5>
+                                    <div class="alert alert-light">
+                                        <p>Luna es una gata de 1 año, necesita cuidado mientras estoy de viaje.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <button class="btn btn-danger">
+                                        <i class="bi bi-x-circle"></i> Rechazar
+                                    </button>
+                                    <button class="btn btn-success">
+                                        <i class="bi bi-check-circle"></i> Aceptar
+                                    </button>
+                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chatModal">
+                                        <i class="bi bi-chat-left-text"></i> Chat
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historial de servicios -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <i class="bi bi-clock-history"></i> Historial de servicios
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <!-- Servicio finalizado -->
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Paseo para Toby</h5>
+                                <span class="badge bg-success">Finalizado</span>
+                            </div>
+                            <p class="mb-1">Cliente: Carlos Méndez</p>
+                            <small class="text-muted">10 Mayo 2025 - 2 horas - $18.000</small>
+                        </div>
+
+                        <!-- Servicio rechazado -->
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Guardería para Lola</h5>
+                                <span class="badge bg-danger">Rechazado</span>
+                            </div>
+                            <p class="mb-1">Cliente: Ana Ramírez</p>
+                            <small class="text-muted">5 Abril 2025 - 4 días - $200.000</small>
+                        </div>
+
+                        <!-- Servicio finalizado -->
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Visita a domicilio para Rocky</h5>
+                                <span class="badge bg-success">Finalizado</span>
+                            </div>
+                            <p class="mb-1">Cliente: David Torres</p>
+                            <small class="text-muted">22 Marzo 2025 - 1 hora - $15.000</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para chat (se mantiene igual) -->
+<div class="modal fade" id="chatModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chat con <span id="chatUserName">Cliente</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="height: 400px; overflow-y: auto;">
+                <!-- Mensajes del chat -->
+                <div class="chat-message received mb-2">
+                    <div class="message-content bg-light p-2 rounded">
+                        <small class="text-muted">Cliente - 10:30 AM</small>
+                        <p>Hola, ¿estarías disponible para cuidar a mi mascota?</p>
+                    </div>
+                </div>
+                <div class="chat-message sent mb-2">
+                    <div class="message-content bg-primary text-white p-2 rounded">
+                        <small class="text-white-50">Tú - 10:32 AM</small>
+                        <p>¡Claro! ¿Qué tipo de servicio necesitas?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Escribe un mensaje...">
+                    <button class="btn btn-primary" type="button">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .chat-message.sent {
+            text-align: right;
+            margin-left: 20%;
+        }
+
+        .chat-message.received {
+            text-align: left;
+            margin-right: 20%;
+        }
+
+        .message-content {
+            display: inline-block;
+            max-width: 80%;
+        }
+
+        .badge {
+            font-size: 0.9em;
+        }
+    </style>
+}
