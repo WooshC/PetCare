@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\ControladorCliente\" />
-    <Folder Include="Controllers\ControladorCuidador\" />
   </ItemGroup>
 
 </Project>

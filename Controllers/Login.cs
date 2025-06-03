@@ -16,6 +16,7 @@ namespace PetCare.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
