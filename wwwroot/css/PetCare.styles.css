@@ -6,32 +6,58 @@
     border-bottom: 1px solid #ddd;
 }
 
-    .navbar-custom .logo {
-        height: 32px;
+    /* 1) Reducir padding vertical del header */
+    .navbar-custom .container .d-flex {
+        padding-top: 0.3rem; /* antes era 0.5rem */
+        padding-bottom: 0.3rem; /* antes era 0.5rem */
     }
 
+    /* 2) Ajustar tamaño del logo */
+    .navbar-custom .logo {
+        height: 36px; /* antes 32px, subimos un poco para mantener proporción */
+        width: auto;
+    }
+
+    /* 3) Reducir texto “PetCare” junto al logo */
+    .navbar-custom .navbar-brand span {
+        font-size: 1.1rem; /* antes podía quedar en 1.25rem */
+        line-height: 1;
+    }
+
+    /* 4) Compactar enlaces de navegación */
     .navbar-custom .nav-link {
-        margin: 0 1rem;
+        margin: 0 0.6rem; /* antes 1rem, redujimos */
         color: #444;
         font-weight: 500;
+        font-size: 0.9rem; /* antes 1rem o mayor */
+        padding-top: 0.35rem; /* antes ~0.5rem */
+        padding-bottom: 0.35rem; /* antes ~0.5rem */
     }
 
+        /* Hover mantiene el cambio de color */
         .navbar-custom .nav-link:hover {
             color: #693666;
         }
 
+/* 5) Ajustar botón “Nueva solicitud” */
 .btn-nova {
     background-color: #fbbd12;
     color: #333;
     font-weight: 600;
     border-radius: 20px;
-    padding: 0.45rem 1.2rem;
+    font-size: 0.9rem; /* texto más pequeño */
+    padding: 0.35rem 0.8rem; /* antes 0.45rem 1.2rem */
 }
 
     .btn-nova:hover {
         background-color: #e0a50f;
         color: #fff;
     }
+
+/* (Opcional) Limitar ancho máximo del contenedor */
+.navbar-custom .container {
+    max-width: 960px; /* antes usaba ancho completo de Bootstrap */
+}
 
 /* ===== Footer oscuro ===== */
 .footer-dark {

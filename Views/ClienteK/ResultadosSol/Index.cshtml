@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Resultados de Solicitud";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Capturamos el id de la solicitud (ej. ?id=123) para mostrarlo en el encabezado
+    var solicitudId = ViewContext.HttpContext.Request.Query["id"].FirstOrDefault() ?? "N/A";
+}
+
+<h2>Resultados de la solicitud #@solicitudId</h2>
+<hr />
+
+<p>Estos son los cuidadores disponibles. Puedes ver su perfil o enviarles tu solicitud.</p>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Tarifa (hora)</th>
+            <th>Ubicación</th>
+            <th>Ver perfil</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Fila ejemplo 1 -->
+        <tr>
+            <td>María Pérez</td>
+            <td>$15</td>
+            <td>Quito</td>
+            <td>
+                <a asp-controller="PerfilCuidador"
+                   asp-action="Index"
+                   asp-route-id="1"
+                   class="btn btn-sm btn-outline-primary">
+                    Ver perfil
+                </a>
+            </td>
+            <td>
+                <button type="button"
+                        class="btn btn-sm btn-primary btn-solicitar"
+                        onclick="toggleSolicitado(this)">
+                    Solicitar
+                </button>
+            </td>
+        </tr>
+
+        <!-- Fila ejemplo 2 -->
+        <tr>
+            <td>Carlos Sánchez</td>
+            <td>$12</td>
+            <td>Guayaquil</td>
+            <td>
+                <a asp-controller="PerfilCuidador"
+                   asp-action="Index"
+                   asp-route-id="2"
+                   class="btn btn-sm btn-outline-primary">
+                    Ver perfil
+                </a>
+            </td>
+            <td>
+                <button type="button"
+                        class="btn btn-sm btn-primary btn-solicitar"
+                        onclick="toggleSolicitado(this)">
+                    Solicitar
+                </button>
+            </td>
+        </tr>
+
+        <!-- Fila ejemplo 3 -->
+        <tr>
+            <td>Ana Gómez</td>
+            <td>$18</td>
+            <td>Cuenca</td>
+            <td>
+                <a asp-controller="PerfilCuidador"
+                   asp-action="Index"
+                   asp-route-id="3"
+                   class="btn btn-sm btn-outline-primary">
+                    Ver perfil
+                </a>
+            </td>
+            <td>
+                <button type="button"
+                        class="btn btn-sm btn-primary btn-solicitar"
+                        onclick="toggleSolicitado(this)">
+                    Solicitar
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    <a asp-controller="MisSol"
+       asp-action="Index"
+       class="btn btn-secondary">
+        ← Volver a mis solicitudes
+    </a>
+</p>
+
+@section Scripts {
+    <script>
+        // Función que cambia el texto del botón “Solicitar” a “Solicitado”
+        // y deshabilita el botón después de hacer clic.
+        function toggleSolicitado(btn) {
+            btn.textContent = "Solicitado";
+            btn.disabled = true;
+            // Cambiamos la clase para que parezca deshabilitado
+            btn.classList.remove("btn-primary");
+            btn.classList.add("btn-secondary");
+        }
+    </script>
+}

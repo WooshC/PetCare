@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Mis Solicitudes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Mis Solicitudes</h2>
+<hr />
+
+<p>A continuación se muestran las solicitudes que has creado:</p>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Fecha de inicio</th>
+            <th scope="col">Horas</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Detalle</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Fila ejemplo 1 (id = 1) -->
+        <tr>
+            <td>1</td>
+            <td>Calle 123, Ciudad</td>
+            <td>2025-06-01</td>
+            <td>4</td>
+            <td>En proceso</td>
+            <td>
+                <a asp-controller="ResultadosSol"
+                   asp-action="Index"
+                   asp-route-id="1"
+                   class="btn btn-sm btn-outline-primary">
+                    Ver detalle
+                </a>
+            </td>
+        </tr>
+
+        <!-- Fila ejemplo 2 (id = 2) -->
+        <tr>
+            <td>2</td>
+            <td>Avenida Central 45</td>
+            <td>2025-05-28</td>
+            <td>2</td>
+            <td>Completada</td>
+            <td>
+                <a asp-controller="ResultadosSol"
+                   asp-action="Index"
+                   asp-route-id="2"
+                   class="btn btn-sm btn-outline-primary">
+                    Ver detalle
+                </a>
+            </td>
+        </tr>
+
+        <!-- Fila ejemplo 3 (id = 3) -->
+        <tr>
+            <td>3</td>
+            <td>Calle Falsa 789</td>
+            <td>2025-05-25</td>
+            <td>3</td>
+            <td>Cancelada</td>
+            <td>
+                <a asp-controller="ResultadosSol"
+                   asp-action="Index"
+                   asp-route-id="3"
+                   class="btn btn-sm btn-outline-primary">
+                    Ver detalle
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

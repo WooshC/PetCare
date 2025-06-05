@@ -28,14 +28,15 @@
                 <!-- Menú principal -->
                 <nav class="d-none d-md-flex align-items-center">
                     <a asp-controller="Home" asp-action="Index" class="nav-link">Inicio</a>
-                    <a asp-controller="Solicitud" asp-action="MisSolicitudes" class="nav-link">Mis solicitudes</a>
+                    <a asp-controller="MisSol" asp-action="Index" class="nav-link">Mis solicitudes</a>
                     <a asp-controller="Chat" asp-action="Index" class="nav-link">Chats</a>
                 </nav>
 
                 <!-- Botón “Nueva solicitud” -->
-                <a asp-controller="Solicitud" asp-action="NuevaSolicitud" class="btn btn-nova">
+                <a asp-controller="NuevaSol" asp-action="Index" class="btn btn-nova">
                     Nueva solicitud
                 </a>
+
             </div>
         </div>
     </header>

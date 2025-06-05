@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Nueva Solicitud";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nueva Solicitud</h2>
+<hr />
+
+<p>Aquí irá el formulario para que el cliente complete su solicitud. Por ahora, solo mostramos los campos básicos sin lógica de envío.</p>
+
+<form method="post" action="@Url.Action("Index", "ResultadosSolicitud")" class="row g-3">
+    <!-- Campo Dirección -->
+    <div class="col-12 col-md-6">
+        <label for="Direccion" class="form-label">Dirección</label>
+        <input id="Direccion" name="Direccion" type="text" class="form-control" placeholder="Calle 123, Ciudad" />
+    </div>
+
+    <!-- Campo Fecha de inicio -->
+    <div class="col-12 col-md-3">
+        <label for="FechaInicio" class="form-label">Fecha de inicio</label>
+        <input id="FechaInicio" name="FechaInicio" type="date" class="form-control" />
+    </div>
+
+    <!-- Campo Horas solicitadas -->
+    <div class="col-12 col-md-3">
+        <label for="Horas" class="form-label">Horas solicitadas</label>
+        <input id="Horas" name="Horas" type="number" min="1" class="form-control" placeholder="1" />
+    </div>
+
+    <!-- Campo Comentarios -->
+    <div class="col-12">
+        <label for="Comentarios" class="form-label">Comentarios adicionales</label>
+        <textarea id="Comentarios" name="Comentarios" class="form-control" rows="3" placeholder="Algo que deba saber el cuidador"></textarea>
+    </div>
+
+    <!-- Botones Enviar / Cancelar -->
+    <div class="col-12">
+        <!-- Para este ejemplo provisional, hacemos post directo a ResultadosSolicitud/Index -->
+        <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+        <!-- Volver al Home (o a donde prefieras) -->
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+    </div>
+</form>
