@@ -9,6 +9,7 @@ using PetCare.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PetCareConnection")));
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(
@@ -27,7 +28,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Home/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Sesión persistente por 30 días
     });
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRoleStrategy, AdminStrategy>();
 builder.Services.AddScoped<IRoleStrategy, CuidadorStrategy>();
