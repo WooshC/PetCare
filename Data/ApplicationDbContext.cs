@@ -62,26 +62,25 @@ namespace PetCare.Data
                       .WithOne(u => u.Cuidador)
                       .HasForeignKey<Cuidador>(c => c.UsuarioID);
 
-   
                 entity.Property(c => c.TarifaPorHora).HasPrecision(10, 2);
                 entity.Property(c => c.CalificacionPromedio).HasPrecision(3, 2);
             });
-
 
             // Configuración de Calificacion
             modelBuilder.Entity<Calificacion>(entity =>
             {
                 entity.HasOne(c => c.Cuidador)
-                      .WithMany(c => c.CalificacionesRecibidas)
+                      .WithMany(c => c.Calificaciones)
                       .HasForeignKey(c => c.CuidadorID)
                       .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(c => c.Cliente)
-                      .WithMany(c => c.CalificacionesRealizadas)
+                      .WithMany(c => c.Calificaciones)
                       .HasForeignKey(c => c.ClienteID)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                entity.Property(c => c.FechaCalificacion).HasDefaultValueSql("GETDATE()");
+                entity.Property(c => c.FechaCalificacion)
+                      .HasDefaultValueSql("GETDATE()");
             });
 
             // Datos iniciales
@@ -107,8 +106,26 @@ namespace PetCare.Data
             );
 
             modelBuilder.Entity<UsuarioRol>().HasData(
-                new UsuarioRol { UsuarioRolID = 1, UsuarioID = 1, RolID = 1 }
+                new UsuarioRol
+                {
+                    UsuarioRolID = 1,
+                    UsuarioID = 1,
+                    RolID = 1
+                }
             );
+
+            modelBuilder.Entity<Calificacion>().HasData(
+      new Calificacion
+      {
+          CalificacionID = 1,
+          CuidadorID = 1,
+          ClienteID = 1,
+          Puntuacion = 5,
+          Comentario = "Excelente servicio con mi mascota",
+          FechaCalificacion = new DateTime(2025, 6, 6, 0, 0, 0) 
+      }
+  );
+
         }
     }
 }
