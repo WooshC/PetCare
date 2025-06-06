@@ -34,10 +34,19 @@ namespace PetCare.Models
 
         // Propiedad de navegación
         public Usuario Usuario { get; set; } = null!;
-        public ICollection<Calificacion> CalificacionesRecibidas { get; set; } = new List<Calificacion>();
+        
+        public ICollection<Calificacion> Calificaciones { get; set; } = new List<Calificacion>();
+
+        public void ActualizarPromedio()
+        {
+            CalificacionPromedio = Calificaciones.Any()
+                ? (decimal)Calificaciones.Average(c => c.Puntuacion)
+                : 0.0m;
+        }
 
 
     }
 
-
 }
+
+

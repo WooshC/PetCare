@@ -1,4 +1,5 @@
-﻿@{
+﻿@model PetCare.Models.Cuidador
+@{
     ViewData["Title"] = "Perfil Cuidador";
 }
 
@@ -10,11 +11,29 @@
                 <div class="card-body text-center">
                     <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                          class="rounded-circle mb-3" width="150" alt="Foto perfil">
-                    <h4>@User.Identity.Name</h4>
+                    <h4>@Model.Usuario.NombreCompleto</h4>
                     <p class="text-muted">Cuidador profesional</p>
 
+                    <div class="mb-3">
+                        @{
+                            var promedio = Model.CalificacionPromedio;
+                            var tieneCalificaciones = Model.Calificaciones.Any();
+                        }
+
+                        <div class="star-rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="bi @(i <= promedio ? "bi-star-fill" : "bi-star") text-warning"></i>
+                            }
+                            <span>(@(tieneCalificaciones ? promedio.ToString("0.0") : "0.0")/5.0)</span>
+                        </div>
+                        <small class="text-muted">
+                            @(tieneCalificaciones ? $"{Model.Calificaciones.Count} calificaciones" : "Sin calificaciones")
+                        </small>
+                    </div>
+
                     <div class="d-grid gap-2">
-                        <button class="btn btn-outline-primary">Editar perfil</button>
+                        <a asp-action="Edit" asp-controller="Cuidador" class="btn btn-outline-primary">Editar perfil</a>
                     </div>
 
                     <hr>
@@ -26,6 +45,12 @@
                             <li>Guardería</li>
                             <li>Visitas a domicilio</li>
                         </ul>
+
+                        <p><strong>Tarifa por hora:</strong></p>
+                        <p>@(Model.TarifaPorHora?.ToString("C") ?? "No especificada")</p>
+
+                        <p><strong>Horario de atención:</strong></p>
+                        <p>@(Model.HorarioAtencion ?? "No especificado")</p>
                     </div>
                 </div>
             </div>

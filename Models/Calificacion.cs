@@ -1,5 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetCare.Models
 {
@@ -7,22 +7,20 @@ namespace PetCare.Models
     {
         public int CalificacionID { get; set; }
 
-        [Required]
+        [ForeignKey("Cuidador")]
         public int CuidadorID { get; set; }
+        public Cuidador Cuidador { get; set; }
 
-        [Required]
+        [ForeignKey("Cliente")]
         public int ClienteID { get; set; }
+        public Cliente Cliente { get; set; }
 
-        [Required]
         [Range(1, 5)]
         public int Puntuacion { get; set; }
 
-        public string? Comentario { get; set; }
+        [StringLength(500)]
+        public string Comentario { get; set; }
 
-        public DateTime FechaCalificacion { get; set; } 
-
-        // Propiedades de navegación
-        public Cuidador Cuidador { get; set; } = null!;
-        public Cliente Cliente { get; set; } = null!;
+        public DateTime FechaCalificacion { get; set; } = DateTime.Now;
     }
 }
