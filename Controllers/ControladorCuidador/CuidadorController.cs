@@ -72,10 +72,7 @@ namespace PetCare.Controllers
                         .ThenInclude(cli => cli.Usuario)
                 .FirstOrDefaultAsync(c => c.UsuarioID == usuarioId);
 
-            if (cuidador == null)
-            {
-                return null;
-            }
+            if (cuidador == null) return null;
 
             cuidador.ActualizarPromedio();
 
@@ -83,8 +80,26 @@ namespace PetCare.Controllers
             {
                 Cuidador = cuidador,
                 SolicitudesPendientes = await _solicitudService.GetSolicitudesPendientes(cuidador.CuidadorID),
+                SolicitudesActivas = await _solicitudService.GetSolicitudesActivas(cuidador.CuidadorID),
                 HistorialServicios = await _solicitudService.GetHistorialServicios(cuidador.CuidadorID)
             };
         }
     }
+
+    /*[Authorize(Roles = "Cliente")]
+[HttpPost("FinalizarSolicitud/{id}")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> FinalizarSolicitud(int id)
+{
+    var clienteId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+    var result = await _solicitudService.FinalizarSolicitud(id, clienteId);
+    
+    if (!result)
+    {
+        return BadRequest("No se pudo finalizar la solicitud");
+    }
+    
+    return RedirectToAction("Dashboard", "Cliente");
+}*/
+
 }

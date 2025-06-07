@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetCare.Models;
-using PetCare.Models.Solicitudes;
+using PetCare.Models.ViewModels;
 
 namespace PetCare.Data
 {

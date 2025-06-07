@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PetCare.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-namespace PetCare.Models.Solicitudes
-{
- public class Solicitud
+
+public class Solicitud
 {
     public int SolicitudID { get; set; }
 
@@ -36,9 +36,26 @@ namespace PetCare.Models.Solicitudes
 
     public DateTime FechaCreacion { get; set; } = DateTime.Now;
     public DateTime? FechaActualizacion { get; set; }
+    [Column(TypeName = "datetime")]
+    public DateTime? FechaAceptacion { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? FechaInicioServicio { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? FechaFinalizacion { get; set; }
+
+
+
+    // Propiedades calculadas
+    [NotMapped]
+    public bool EstaEnProgreso => Estado == "En Progreso";
+    [NotMapped]
+    public bool EstaFueraDeTiempo => Estado == "Fuera de Tiempo";
+    [NotMapped]
+    public bool PuedeFinalizar => EstaEnProgreso || EstaFueraDeTiempo;
 
     // Propiedades de navegación
     public Cliente Cliente { get; set; }
     public Cuidador Cuidador { get; set; }
-}
 }
