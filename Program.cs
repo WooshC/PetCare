@@ -21,13 +21,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Login/Index";
         options.AccessDeniedPath = "/Home/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Sesión persistente por 30 días
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Usa Always en producción
+        options.Cookie.SameSite = SameSiteMode.Strict;
     });
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRoleStrategy, AdminStrategy>();
 builder.Services.AddScoped<IRoleStrategy, CuidadorStrategy>();
@@ -55,6 +61,7 @@ else
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
+app.MapControllers().RequireAuthorization();
 
 app.MapControllerRoute(
     name: "default",

@@ -19,6 +19,11 @@ namespace PetCare.Controllers
 
         protected async Task<IActionResult> RedirectByRole(Usuario usuario)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             // Obtener roles del usuario
             var roles = await _context.UsuarioRoles
                 .Include(ur => ur.Rol)
