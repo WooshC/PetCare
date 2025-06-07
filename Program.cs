@@ -7,9 +7,8 @@ using PetCare.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PetCareConnection")));
 
+// Configuración de DbContext (solo una vez)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(
@@ -21,41 +20,53 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
+// Autenticación
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Login/Index";
         options.AccessDeniedPath = "/Home/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Sesión persistente por 30 días
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+            ? CookieSecurePolicy.SameAsRequest
+            : CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Lax; // Relaxed para mejor compatibilidad
     });
-builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IRoleStrategy, AdminStrategy>();
-builder.Services.AddScoped<IRoleStrategy, CuidadorStrategy>();
-builder.Services.AddScoped<IRoleStrategy, ClienteStrategy>();
 
-// Registro como clases concretas (para que el factory las pueda resolver)
+// Servicios
+builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ISolicitudService, SolicitudService>();
+
+// Registro de estrategias
 builder.Services.AddScoped<AdminStrategy>();
 builder.Services.AddScoped<CuidadorStrategy>();
 builder.Services.AddScoped<ClienteStrategy>();
-
-// Registra el factory
 builder.Services.AddScoped<RoleStrategyFactory>();
 
 var app = builder.Build();
 
+// Middleware pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 else
 {
     app.UseDeveloperExceptionPage();
 }
 
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+// Orden CORRECTO: Authentication antes de Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Configuración de rutas
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
