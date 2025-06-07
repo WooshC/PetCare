@@ -1,16 +1,46 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-namespace PetCare.Controllers.ControladorCuidador
+using PetCare.Data;
+using PetCare.Services;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace PetCare.Controllers
 {
+    [Route("Cuidador")]
     public class CuidadorController : Controller
     {
-        public IActionResult Cuidador()
+        private readonly ApplicationDbContext _context;
+
+        public CuidadorController(ApplicationDbContext context)
         {
-            return View(); // Esto buscará Views/Cuidador/Cuidador.cshtml
+            _context = context;
         }
 
-        public IActionResult DetalleSolicitud()
+        [HttpGet("Cuidador")]
+        public async Task<IActionResult> Cuidador(int? id)
         {
-            return View(); // Esto buscará Views/Cuidador/DetalleSolicitud.cshtml
+            if (!id.HasValue)
+            {
+                return NotFound();
+            }
+
+            var cuidador = await _context.Cuidadores
+                .Include(c => c.Usuario)
+                .Include(c => c.Calificaciones)
+                .ThenInclude(cal => cal.Cliente) // Si tienes relación con Cliente
+                .AsNoTracking() // Mejora rendimiento para operaciones de solo lectura
+                .FirstOrDefaultAsync(c => c.UsuarioID == id.Value);
+
+            if (cuidador == null)
+            {
+                return NotFound();
+            }
+
+            // Actualiza el promedio llamando al método del modelo
+            cuidador.ActualizarPromedio();
+
+            return View(cuidador);
         }
+
     }
 }

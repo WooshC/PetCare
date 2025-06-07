@@ -1,5 +1,4 @@
-﻿// PetCare/Services/CuidadorStrategy.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Models;
@@ -8,11 +7,19 @@ namespace PetCare.Services
 {
     public class CuidadorStrategy : IRoleStrategy
     {
+        private readonly ApplicationDbContext _context;
+
+        public CuidadorStrategy(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // Implementación completa del método
         public async Task<IActionResult> HandleRequestAsync(ApplicationDbContext context, Controller controller, Usuario usuario)
         {
-            var cuidador = await context.Cuidadores
+            var cuidador = await _context.Cuidadores
                 .Include(c => c.Usuario)
-                .Include(c => c.Calificaciones) // Usa el nombre correcto de la propiedad
+                .Include(c => c.Calificaciones)
                 .FirstOrDefaultAsync(c => c.UsuarioID == usuario.UsuarioID);
 
             if (cuidador == null)
@@ -20,18 +27,20 @@ namespace PetCare.Services
                 return controller.NotFound();
             }
 
-            if (cuidador.Calificaciones.Any()) // Actualizado para usar la propiedad correcta
+            if (cuidador.Calificaciones.Any())
             {
                 cuidador.CalificacionPromedio = (decimal)cuidador.Calificaciones
                     .Average(c => c.Puntuacion);
             }
 
-            return controller.View("~/Views/Cuidador/Cuidador.cshtml", cuidador);
+            // Redirige al controlador correcto para mantener la URL limpia
+            return controller.RedirectToAction("Cuidador", "Cuidador", new { id = usuario.UsuarioID });
         }
 
-        public Task<IActionResult> HandleRequestAsync(Controller controller, Usuario usuario)
+        // Implementación alternativa si es necesaria
+        public async Task<IActionResult> HandleRequestAsync(Controller controller, Usuario usuario)
         {
-            throw new NotImplementedException();
+            return await HandleRequestAsync(_context, controller, usuario);
         }
     }
 }
