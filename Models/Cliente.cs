@@ -1,4 +1,4 @@
-﻿using PetCare.Models.Solicitudes;
+﻿using PetCare.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace PetCare.Models
