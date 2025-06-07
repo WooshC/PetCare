@@ -33,8 +33,8 @@ namespace PetCare.Services
                     .Average(c => c.Puntuacion);
             }
 
-            // Redirige al controlador correcto para mantener la URL limpia
-            return controller.RedirectToAction("Cuidador", "Cuidador", new { id = usuario.UsuarioID });
+            // Redirige al Dashboard que sí existe
+            return controller.RedirectToAction("Dashboard", "Cuidador");
         }
 
         // Implementación alternativa si es necesaria
