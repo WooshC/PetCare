@@ -1,0 +1,59 @@
+﻿@model PetCare.Models.Calificacion
+
+<div class="modal fade" id="modalCalificar" tabindex="-1" aria-labelledby="modalCalificarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Calificar" asp-controller="Cliente" method="post">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title" id="modalCalificarLabel">
+                        <i class="bi bi-star"></i> Calificar servicio
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="SolicitudID" id="solicitudIdInput" />
+
+                    <div class="mb-3">
+                        <label asp-for="Puntuacion" class="form-label">Calificación</label>
+                        <select asp-for="Puntuacion" class="form-select">
+                            <option value="">-- Seleccionar --</option>
+                            <option value="1">1 - Muy malo</option>
+                            <option value="2">2 - Malo</option>
+                            <option value="3">3 - Regular</option>
+                            <option value="4">4 - Bueno</option>
+                            <option value="5">5 - Excelente</option>
+                        </select>
+                        <span asp-validation-for="Puntuacion" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Comentario" class="form-label">Comentario</label>
+                        <textarea asp-for="Comentario" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Comentario" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-send-check"></i> Enviar
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const modalCalificar = document.getElementById('modalCalificar');
+        modalCalificar.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const solicitudId = button.getAttribute('data-solicitud-id');
+            const input = modalCalificar.querySelector('#solicitudIdInput');
+            input.value = solicitudId;
+        });
+    </script>
+}
+

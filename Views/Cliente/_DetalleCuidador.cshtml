@@ -1,0 +1,16 @@
+﻿@model PetCare.Models.Cuidador
+
+<div class="card-body">
+    <p><strong>Dirección:</strong> @Model.Usuario.Direccion</p>
+    <p><strong>Tarifa por hora:</strong> @(Model.TarifaPorHora?.ToString("C") ?? "No especificada")</p>
+
+
+    <div class="d-flex justify-content-end mt-3 gap-2">
+        <button class="btn btn-outline-success">
+            <i class="bi bi-hand-index-thumb"></i> Solicitar
+        </button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chatModal">
+            <i class="bi bi-chat-left-text"></i> Chat
+        </button>
+    </div>
+</div>
