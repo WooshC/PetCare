@@ -83,6 +83,7 @@ namespace PetCare.Controllers
             {
                 Cuidador = cuidador,
                 SolicitudesPendientes = await _solicitudService.GetSolicitudesPendientes(cuidador.CuidadorID),
+                SolicitudesActivas = await _solicitudService.GetSolicitudesActivas(cuidador.CuidadorID) ?? new List<Solicitud>(),
                 HistorialServicios = await _solicitudService.GetHistorialServicios(cuidador.CuidadorID)
             };
         }

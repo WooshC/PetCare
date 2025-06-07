@@ -134,6 +134,102 @@
                         </div>
                     </div>
 
+
+            <!-- Solicitudes activas (Aceptadas/En Progreso) -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <i class="bi bi-hourglass-split"></i> Servicios Activos
+                </div>
+                <div class="card-body">
+                    @if (!Model.SolicitudesActivas.Any())
+                    {
+                        <div class="alert alert-info">
+                            No tienes servicios activos en este momento.
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var solicitud in Model.SolicitudesActivas)
+                        {
+                            <div class="alert @(solicitud.Estado == "En Progreso" ? "alert-success" : "alert-warning")">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@solicitud.Cliente.Usuario.NombreCompleto</strong> - @solicitud.TipoServicio
+                                        <p>
+                                            <strong>Estado:</strong>
+                                            <span class="badge">
+                                                @solicitud.Estado
+                                            </span>
+                                        </p>
+                                        <p><strong>Horario:</strong> @solicitud.FechaHoraInicio.ToString("dd MMM yyyy HH:mm")</p>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary"
+                                                type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#detalleActivo@solicitud.SolicitudID">
+                                            Ver Detalle
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Detalle de la solicitud activa -->
+                                <div class="collapse mt-3" id="detalleActivo@solicitud.SolicitudID">
+                                    <div class="card card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Tipo de servicio:</strong> @solicitud.TipoServicio</p>
+                                                <p><strong>Duración:</strong> @solicitud.DuracionHoras horas</p>
+                                                <p><strong>Fecha:</strong> @solicitud.FechaHoraInicio.ToString("dd MMMM yyyy")</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Hora:</strong> @solicitud.FechaHoraInicio.ToString("HH:mm")</p>
+                                                <p><strong>Ubicación:</strong> @solicitud.Ubicacion</p>
+                                                <p><strong>Pago:</strong> $@((solicitud.DuracionHoras * Model.Cuidador.TarifaPorHora.GetValueOrDefault()).ToString("N0"))</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <h5>Descripción:</h5>
+                                            <div class="alert alert-light">
+                                                <p>@solicitud.Descripcion</p>
+                                            </div>
+                                        </div>
+                                        @if (solicitud.Estado == "En Progreso")
+                                        {
+                                            <div class="alert alert-info">
+                                                <i class="bi bi-clock"></i> Servicio en curso
+                                                @if (solicitud.FechaHoraInicio.AddHours(solicitud.DuracionHoras) < DateTime.Now)
+                                                {
+                                                    <span class="text-danger"> - Tiempo excedido</span>
+                                                }
+                                            </div>
+                                        }
+                                        <div class="d-flex justify-content-between mt-2">
+                                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chatModal">
+                                                <i class="bi bi-chat-left-text"></i> Chat
+                                            </button>
+                                            @if (solicitud.Estado == "En Progreso")
+                                            {
+                                                <button class="btn btn-success" disabled>
+                                                    <i class="bi bi-check-circle"></i> En Progreso
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-secondary" disabled>
+                                                    <i class="bi bi-hourglass"></i> Aceptada
+                                                </button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+
                     <!-- Historial de servicios -->
                     <div class="card shadow-sm">
                         <div class="card-header bg-success text-white">
@@ -172,6 +268,8 @@
                     </div>
                 </div>
             </div>
+
+
 
 
 <!-- Modal para chat (se mantiene igual) -->

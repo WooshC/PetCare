@@ -1,4 +1,4 @@
-﻿using PetCare.Models.Solicitudes;
+﻿using PetCare.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -37,9 +37,9 @@ namespace PetCare.Models
         // Propiedades de navegación
         public Usuario Usuario { get; set; } = null!;
         public ICollection<Calificacion> Calificaciones { get; set; } = new List<Calificacion>();
-        public ICollection<DocumentoVerificacion> DocumentosVerificacion { get; set; } = new List<DocumentoVerificacion>();
         public ICollection<Solicitud> Solicitudes { get; set; } = new List<Solicitud>();
 
+        public ICollection<DocumentoVerificacion> DocumentosVerificacion { get; set; } = new List<DocumentoVerificacion>();
         public void ActualizarPromedio()
         {
             CalificacionPromedio = Calificaciones.Any()

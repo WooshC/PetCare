@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PetCare.Models.Solicitudes;
+using PetCare.Models.ViewModels;
 
 namespace PetCare.Services
 {
@@ -54,6 +54,14 @@ namespace PetCare.Services
             await _context.SaveChangesAsync();
 
             return true;
+        }
+        public async Task<IEnumerable<Solicitud>> GetSolicitudesActivas(int cuidadorId)
+        {
+            return await _context.Solicitudes
+                .Where(s => s.CuidadorID == cuidadorId && (s.Estado == "Aceptada" || s.Estado == "En Progreso"))
+                .Include(s => s.Cliente)
+                    .ThenInclude(c => c.Usuario)
+                .ToListAsync();
         }
     }
 }
