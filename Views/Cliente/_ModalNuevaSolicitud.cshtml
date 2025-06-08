@@ -1,4 +1,4 @@
-﻿@model PetCare.Models.Solicitud
+﻿@model PetCare.Models.ViewModels.NuevaSolicitudViewModel
 
 <div class="modal fade" id="nuevaSolicitudModal" tabindex="-1" aria-labelledby="nuevaSolicitudLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -10,7 +10,11 @@
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
+
                 <div class="modal-body">
+                    <!-- resumen de errores -->
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+
                     <div class="mb-3">
                         <label asp-for="TipoServicio" class="form-label">Tipo de servicio</label>
                         <select asp-for="TipoServicio" class="form-select">
@@ -40,6 +44,7 @@
                         <span asp-validation-for="Descripcion" class="text-danger"></span>
                     </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">
                         <i class="bi bi-check-circle"></i> Crear

@@ -9,8 +9,7 @@ namespace PetCare.Models
         [Required]
         public int ClienteID { get; set; }
 
-        [Required]
-        public int CuidadorID { get; set; }
+        public int? CuidadorID { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -19,7 +18,6 @@ namespace PetCare.Models
         [Required]
         public string Descripcion { get; set; }
 
-        [Required]
         public DateTime FechaHoraInicio { get; set; }
 
         [Required]
@@ -57,7 +55,7 @@ namespace PetCare.Models
 
         // Propiedades de navegación
         public Cliente Cliente { get; set; }
-        public Cuidador Cuidador { get; set; }
+        public Cuidador? Cuidador { get; set; }
 
         [NotMapped]
         public List<Cuidador> CuidadoresRelacionados { get; set; } = new();

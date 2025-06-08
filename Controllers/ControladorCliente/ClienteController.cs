@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Models;
+using PetCare.Models.ViewModels;
 using PetCare.Services;
 
 namespace PetCare.Controllers.ControladorCliente
@@ -21,12 +23,13 @@ namespace PetCare.Controllers.ControladorCliente
         // Vista principal del cliente
         public async Task<IActionResult> Cliente()
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.UsuarioID == 1); // Simulado
+            var usuarioId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.UsuarioID == usuarioId);
             return await _clienteStrategy.HandleRequestAsync(_context, this, usuario);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CrearSolicitud(Solicitud solicitud)
+        public async Task<IActionResult> CrearSolicitud(NuevaSolicitudViewModel modelo)
         {
             if (!ModelState.IsValid)
             {
@@ -34,12 +37,26 @@ namespace PetCare.Controllers.ControladorCliente
                 return RedirectToAction("Cliente");
             }
 
-            solicitud.FechaCreacion = DateTime.Now;
-            solicitud.Estado = "Pendiente";
-            solicitud.ClienteID = 1; // Simulado - reemplazar por ID real del cliente
+            var usuarioId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.UsuarioID == usuarioId);
 
-            // Temporalmente asignar a un cuidador por defecto (debería seleccionarse después)
-            solicitud.CuidadorID = _context.Cuidadores.Select(c => c.CuidadorID).FirstOrDefault();
+            if (cliente == null)
+            {
+                TempData["Error"] = "Cliente no encontrado.";
+                return RedirectToAction("Cliente");
+            }
+
+            var solicitud = new Solicitud
+            {
+                ClienteID = cliente.ClienteID,
+                TipoServicio = modelo.TipoServicio,
+                Ubicacion = modelo.Ubicacion,
+                DuracionHoras = modelo.DuracionHoras,
+                Descripcion = modelo.Descripcion,
+                Estado = "Pendiente",
+                FechaCreacion = DateTime.Now,
+                FechaHoraInicio = DateTime.Now
+            };
 
             _context.Solicitudes.Add(solicitud);
             await _context.SaveChangesAsync();
@@ -47,6 +64,10 @@ namespace PetCare.Controllers.ControladorCliente
             TempData["MensajeExito"] = "Solicitud creada exitosamente.";
             return RedirectToAction("Cliente");
         }
+
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> Calificar(int SolicitudID, Calificacion calificacion)
@@ -61,7 +82,13 @@ namespace PetCare.Controllers.ControladorCliente
                 return RedirectToAction("Cliente");
             }
 
-            calificacion.CuidadorID = solicitud.CuidadorID;
+            if (solicitud.CuidadorID == null)
+            {
+                TempData["Error"] = "Esta solicitud aún no tiene un cuidador asignado. No se puede calificar.";
+                return RedirectToAction("Cliente");
+            }
+
+            calificacion.CuidadorID = solicitud.CuidadorID.Value;
             calificacion.ClienteID = solicitud.ClienteID;
             calificacion.FechaCalificacion = DateTime.Now;
 
