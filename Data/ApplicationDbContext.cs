@@ -18,7 +18,8 @@ namespace PetCare.Data
         public DbSet<Cuidador> Cuidadores { get; set; }
         public DbSet<DocumentoVerificacion> DocumentosVerificacion { get; set; }
         public DbSet<Calificacion> Calificaciones { get; set; }
-        public DbSet<Solicitud> Solicitudes { get; set; } // Nueva entidad
+        public DbSet<Solicitud> Solicitudes { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

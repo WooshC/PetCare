@@ -1,0 +1,50 @@
+﻿@model PetCare.Models.Solicitud
+<div class="card card-body shadow-sm">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <p><strong>Tipo de servicio:</strong> @Model.TipoServicio</p>
+            <p><strong>Dirección:</strong> @Model.Ubicacion</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Horas solicitadas:</strong> @Model.DuracionHoras</p>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <h5>Descripción:</h5>
+        <div class="alert alert-light">
+            <p>@Model.Descripcion</p>
+        </div>
+    </div>
+
+    @if (Model.CuidadoresRelacionados != null && Model.CuidadoresRelacionados.Any())
+    {
+        <div class="mb-2">
+            <h5>Cuidadores sugeridos:</h5>
+            @foreach (var cuidador in Model.CuidadoresRelacionados)
+            {
+                var cuidadorId = $"cuidador_{cuidador.CuidadorID}";
+                <div class="card mb-2">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>@cuidador.Usuario.NombreCompleto</strong>
+                        </span>
+                        <button class="btn btn-sm btn-outline-primary"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#@cuidadorId">
+                            Ver detalle
+                        </button>
+                    </div>
+                    <div id="@cuidadorId" class="collapse">
+                        @Html.Partial("_DetalleCuidador", cuidador)
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-secondary">No se encontraron cuidadores sugeridos para esta solicitud.</div>
+    }
+</div>
