@@ -1,0 +1,37 @@
+﻿@model PetCare.Models.ViewModels.CuidadorDashboardViewModel
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <i class="bi bi-clock-history"></i> Historial de servicios
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            @if (!Model.HistorialServicios.Any())
+            {
+                <div class="alert alert-info">
+                    No tienes servicios en tu historial aún.
+                </div>
+            }
+            else
+            {
+                @foreach (var servicio in Model.HistorialServicios)
+                {
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">@servicio.TipoServicio para @servicio.Cliente.Usuario.NombreCompleto</h5>
+                            <span class="badge @(servicio.Estado == "Finalizada" ? "bg-success" : "bg-danger")">
+                                @servicio.Estado
+                            </span>
+                        </div>
+                        <p class="mb-1">Cliente: @servicio.Cliente.Usuario.NombreCompleto</p>
+                        <small class="text-muted">
+                            @servicio.FechaHoraInicio.ToString("dd MMMM yyyy") -
+                            @servicio.DuracionHoras @(servicio.DuracionHoras > 1 ? "horas" : "hora") -
+                            $@((servicio.DuracionHoras * Model.Cuidador.TarifaPorHora.GetValueOrDefault()).ToString("N0"))
+                        </small>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
