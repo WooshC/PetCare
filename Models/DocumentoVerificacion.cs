@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetCare.Models
 {
@@ -9,7 +10,7 @@ namespace PetCare.Models
         public int DocumentoID { get; set; }
 
         [Required]
-        public int UsuarioID { get; set; }
+        public int CuidadorID { get; set; } // Cambiado de UsuarioID a CuidadorID
 
         [Required]
         [StringLength(50)]
@@ -27,6 +28,7 @@ namespace PetCare.Models
         public DateTime? FechaVerificacion { get; set; }
 
         // Propiedad de navegación
-        public Usuario Usuario { get; set; } = null!;
+        [ForeignKey("CuidadorID")]
+        public Cuidador Cuidador { get; set; } = null!; // Cambiado de Usuario a Cuidador
     }
 }

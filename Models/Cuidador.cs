@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PetCare.Models.ViewModels;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetCare.Models
 {
@@ -32,21 +34,17 @@ namespace PetCare.Models
         public bool DocumentoVerificado { get; set; } = false;
         public DateTime? FechaVerificacion { get; set; }
 
-        // Propiedad de navegación
+        // Propiedades de navegación
         public Usuario Usuario { get; set; } = null!;
-        
         public ICollection<Calificacion> Calificaciones { get; set; } = new List<Calificacion>();
+        public ICollection<Solicitud> Solicitudes { get; set; } = new List<Solicitud>();
 
+        public ICollection<DocumentoVerificacion> DocumentosVerificacion { get; set; } = new List<DocumentoVerificacion>();
         public void ActualizarPromedio()
         {
             CalificacionPromedio = Calificaciones.Any()
                 ? (decimal)Calificaciones.Average(c => c.Puntuacion)
                 : 0.0m;
         }
-
-
     }
-
 }
-
-

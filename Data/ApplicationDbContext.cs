@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetCare.Models;
+using PetCare.Models.ViewModels;
 
 namespace PetCare.Data
 {
@@ -68,6 +69,26 @@ namespace PetCare.Data
                 entity.Property(c => c.CalificacionPromedio).HasPrecision(3, 2);
             });
 
+            // Configuración de Solicitud
+            modelBuilder.Entity<Solicitud>(entity =>
+            {
+                entity.HasOne(s => s.Cliente)
+                      .WithMany(c => c.Solicitudes)
+                      .HasForeignKey(s => s.ClienteID)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(s => s.Cuidador)
+                      .WithMany(c => c.Solicitudes)
+                      .HasForeignKey(s => s.CuidadorID)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(s => s.Estado).HasDefaultValue("Pendiente");
+                entity.Property(s => s.FechaCreacion).HasDefaultValueSql("GETDATE()");
+
+                entity.HasCheckConstraint("CHK_Estado", "Estado IN ('Pendiente', 'Aceptada', 'Rechazada', 'Finalizada')");
+                entity.HasCheckConstraint("CHK_Duracion", "DuracionHoras > 0");
+            });
+
             // Configuración de Calificacion
             modelBuilder.Entity<Calificacion>(entity =>
             {
@@ -83,6 +104,14 @@ namespace PetCare.Data
 
                 entity.Property(c => c.FechaCalificacion)
                       .HasDefaultValueSql("GETDATE()");
+            });
+
+            // Configuración de DocumentoVerificacion
+            modelBuilder.Entity<DocumentoVerificacion>(entity =>
+            {
+                entity.HasOne(d => d.Cuidador)
+                      .WithMany(c => c.DocumentosVerificacion)
+                      .HasForeignKey(d => d.CuidadorID);
             });
 
             // Datos iniciales
@@ -115,19 +144,6 @@ namespace PetCare.Data
                     RolID = 1
                 }
             );
-
-            modelBuilder.Entity<Calificacion>().HasData(
-      new Calificacion
-      {
-          CalificacionID = 1,
-          CuidadorID = 1,
-          ClienteID = 1,
-          Puntuacion = 5,
-          Comentario = "Excelente servicio con mi mascota",
-          FechaCalificacion = new DateTime(2025, 6, 6, 0, 0, 0) 
-      }
-  );
-
         }
     }
 }

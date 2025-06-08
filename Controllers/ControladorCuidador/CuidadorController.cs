@@ -1,16 +1,91 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-namespace PetCare.Controllers.ControladorCuidador
+using PetCare.Data;
+using PetCare.Models;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using PetCare.Models.ViewModels;
+using PetCare.Services;
+
+namespace PetCare.Controllers
 {
+    [Authorize(Roles = "Cuidador")]
+    [Route("Cuidador")]
     public class CuidadorController : Controller
     {
-        public IActionResult Cuidador()
+        private readonly ApplicationDbContext _context;
+        private readonly ISolicitudService _solicitudService;
+
+        public CuidadorController(ApplicationDbContext context, ISolicitudService solicitudService)
         {
-            return View(); // Esto buscará Views/Cuidador/Cuidador.cshtml
+            _context = context;
+            _solicitudService = solicitudService;
         }
 
-        public IActionResult DetalleSolicitud()
+        [HttpGet("Dashboard")]
+        [HttpGet("")] // Maneja tanto /Cuidador como /Cuidador/Dashboard
+        public async Task<IActionResult> Dashboard()
         {
-            return View(); // Esto buscará Views/Cuidador/DetalleSolicitud.cshtml
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var viewModel = await ObtenerViewModel(userId);
+            return View("Cuidador", viewModel); // Especifica el nombre de la vista
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Perfil(int id)
+        {
+            var viewModel = await ObtenerViewModel(id);
+            return View("Cuidador", viewModel); // Usa la misma vista
+        }
+
+        [HttpPost("AceptarSolicitud/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AceptarSolicitud(int id)
+        {
+            var result = await _solicitudService.CambiarEstadoSolicitud(id, "Aceptada");
+            if (!result)
+            {
+                return NotFound();
+            }
+            return RedirectToAction("Dashboard");
+        }
+
+        [HttpPost("RechazarSolicitud/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RechazarSolicitud(int id)
+        {
+            var result = await _solicitudService.CambiarEstadoSolicitud(id, "Rechazada");
+            if (!result)
+            {
+                return NotFound();
+            }
+            return RedirectToAction("Dashboard");
+        }
+
+        private async Task<CuidadorDashboardViewModel> ObtenerViewModel(int usuarioId)
+        {
+            var cuidador = await _context.Cuidadores
+                .Include(c => c.Usuario)
+                .Include(c => c.Calificaciones)
+                    .ThenInclude(cal => cal.Cliente)
+                        .ThenInclude(cli => cli.Usuario)
+                .FirstOrDefaultAsync(c => c.UsuarioID == usuarioId);
+
+            if (cuidador == null)
+            {
+                return null;
+            }
+
+            cuidador.ActualizarPromedio();
+
+            return new CuidadorDashboardViewModel
+            {
+                Cuidador = cuidador,
+                SolicitudesPendientes = await _solicitudService.GetSolicitudesPendientes(cuidador.CuidadorID),
+                SolicitudesActivas = await _solicitudService.GetSolicitudesActivas(cuidador.CuidadorID) ?? new List<Solicitud>(),
+                HistorialServicios = await _solicitudService.GetHistorialServicios(cuidador.CuidadorID)
+            };
         }
     }
 }

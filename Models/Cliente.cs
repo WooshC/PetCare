@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PetCare.Models.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace PetCare.Models
 {
@@ -21,7 +22,9 @@ namespace PetCare.Models
         public Usuario Usuario { get; set; } = null!;
         public ICollection<Calificacion> Calificaciones { get; set; } = new List<Calificacion>();
 
+
         public ICollection<Solicitud> Solicitudes { get; set; } = new List<Solicitud>();
 
     }
+
 }
