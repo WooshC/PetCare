@@ -11,5 +11,7 @@ namespace PetCare.Services
         Task<IEnumerable<Solicitud>> GetHistorialServicios(int cuidadorId);
         Task<bool> CambiarEstadoSolicitud(int solicitudId, string nuevoEstado);
         Task<IEnumerable<Solicitud>> GetSolicitudesActivas(int cuidadorId);
+
+        Task<IEnumerable<Solicitud>> GetSolicitudesFueraDeTiempo(int cuidadorId);
     }
 }

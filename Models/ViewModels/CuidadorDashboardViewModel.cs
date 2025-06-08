@@ -12,6 +12,7 @@ namespace PetCare.Models.ViewModels
         public IEnumerable<Solicitud> SolicitudesEnProgreso { get; set; }
         public IEnumerable<Solicitud> HistorialServicios { get; set; }
 
+        public IEnumerable<Solicitud> SolicitudesFueraDeTiempo { get; set; }
         public decimal TotalGanado => HistorialServicios
            .Where(s => s.Estado == "Finalizada")
            .Sum(s => s.DuracionHoras * (Cuidador.TarifaPorHora ?? 0));

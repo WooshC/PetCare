@@ -82,6 +82,7 @@ namespace PetCare.Controllers
             return new CuidadorDashboardViewModel
             {
                 Cuidador = cuidador,
+                SolicitudesFueraDeTiempo = await _solicitudService.GetSolicitudesFueraDeTiempo(cuidador.CuidadorID) ?? new List<Solicitud>(),
                 SolicitudesPendientes = await _solicitudService.GetSolicitudesPendientes(cuidador.CuidadorID),
                 SolicitudesActivas = await _solicitudService.GetSolicitudesActivas(cuidador.CuidadorID) ?? new List<Solicitud>(),
                 HistorialServicios = await _solicitudService.GetHistorialServicios(cuidador.CuidadorID)

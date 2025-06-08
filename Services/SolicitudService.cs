@@ -63,5 +63,17 @@ namespace PetCare.Services
                     .ThenInclude(c => c.Usuario)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Solicitud>> GetSolicitudesFueraDeTiempo(int cuidadorId)
+        {
+            return await _context.Solicitudes
+                .Include(s => s.Cliente)
+                    .ThenInclude(c => c.Usuario)
+                .Where(s => s.CuidadorID == cuidadorId &&
+                       s.Estado == "En Progreso" &&
+                       s.FechaHoraInicio.AddHours(s.DuracionHoras) < DateTime.Now)
+                .OrderByDescending(s => s.FechaHoraInicio)
+                .ToListAsync();
+        }
     }
 }
