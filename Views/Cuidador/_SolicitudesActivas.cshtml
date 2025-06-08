@@ -1,0 +1,35 @@
+﻿@model PetCare.Models.ViewModels.CuidadorDashboardViewModel
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-warning text-dark">
+        <i class="bi bi-hourglass-split"></i> Servicios Activos
+    </div>
+    <div class="card-body">
+        @if (!Model.SolicitudesActivas.Any() && !Model.SolicitudesFueraDeTiempo.Any())
+        {
+            <div class="alert alert-info">
+                No tienes servicios activos en este momento.
+            </div>
+        }
+        else
+        {
+            <!-- Mostrar primero las en progreso -->
+            @foreach (var solicitud in Model.SolicitudesActivas.Where(s => s.Estado == "En Progreso"))
+            {
+                @await Html.PartialAsync("_SolicitudActivaItem", (solicitud, Model))
+            }
+
+            <!-- Luego las aceptadas -->
+            @foreach (var solicitud in Model.SolicitudesActivas.Where(s => s.Estado == "Aceptada"))
+            {
+                @await Html.PartialAsync("_SolicitudAceptadaItem", (solicitud, Model))
+            }
+
+            <!-- Finalmente las fuera de tiempo -->
+            @foreach (var solicitud in Model.SolicitudesFueraDeTiempo)
+            {
+                @await Html.PartialAsync("_SolicitudFueraDeTiempoItem", (solicitud, Model))
+            }
+        }
+    </div>
+</div>
