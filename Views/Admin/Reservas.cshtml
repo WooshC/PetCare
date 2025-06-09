@@ -1,0 +1,81 @@
+@model IEnumerable<PetCare.Models.Solicitud>
+
+@{
+    ViewData["Title"] = "Reservas";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">Reservas</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Cuidador</th>
+                            <th>Fecha Inicio</th>
+                            <th>Duración</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var solicitud in Model)
+                        {
+                            <tr>
+                                <td>@solicitud.SolicitudID</td>
+                                <td>@solicitud.Cliente.Usuario.NombreCompleto</td>
+                                <td>@solicitud.Cuidador.Usuario.NombreCompleto</td>
+                                <td>@solicitud.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@solicitud.DuracionHoras horas</td>
+                                <td>
+                                    <span class="badge bg-@(solicitud.Estado == "Pendiente" ? "warning" : 
+                                                   solicitud.Estado == "Aceptada" ? "success" : 
+                                                   solicitud.Estado == "Finalizada" ? "info" : "danger")">
+                                        @solicitud.Estado
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" onclick="verDetalles(@solicitud.SolicitudID)">
+                                        Ver Detalles
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver detalles -->
+<div class="modal fade" id="detallesModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles de la Reserva</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="detallesContenido"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function verDetalles(id) {
+            $.get(`/Admin/VerDetalles/${id}`, function(data) {
+                $('#detallesContenido').html(data);
+                $('#detallesModal').modal('show');
+            });
+        }
+    </script>
+} 

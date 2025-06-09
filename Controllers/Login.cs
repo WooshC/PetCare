@@ -68,8 +68,7 @@ namespace PetCare.Controllers
 
             var authProperties = new AuthenticationProperties
             {
-                // Configuraciones adicionales si son necesarias
-                IsPersistent = true // Para mantener la sesión
+                IsPersistent = true
             };
 
             await HttpContext.SignInAsync(

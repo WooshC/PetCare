@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetCare.Models
 {
     public class Usuario
     {
+        [Key]
         public int UsuarioID { get; set; }
 
         [Required]
@@ -33,10 +36,17 @@ namespace PetCare.Models
         public DateTime FechaRegistro { get; set; }
         public DateTime? UltimoAcceso { get; set; }
         public bool Activo { get; set; } = true;
+        public bool Verificado { get; set; } = false;
 
         // Propiedades de navegación
         public ICollection<UsuarioRol> Roles { get; set; } = new List<UsuarioRol>();
+        
+        [InverseProperty("Usuario")]
         public Cliente? Cliente { get; set; }
+        
+        [InverseProperty("Usuario")]
         public Cuidador? Cuidador { get; set; }
+        
+        public ICollection<DocumentoVerificacion> DocumentosVerificacion { get; set; } = new List<DocumentoVerificacion>();
     }
 }

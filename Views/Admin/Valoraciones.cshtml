@@ -1,0 +1,52 @@
+@model IEnumerable<PetCare.Models.Calificacion>
+
+@{
+    ViewData["Title"] = "Valoraciones";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">Valoraciones</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Cuidador</th>
+                            <th>Cliente</th>
+                            <th>Puntuación</th>
+                            <th>Comentario</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var calificacion in Model)
+                        {
+                            <tr>
+                                <td>@calificacion.Cuidador.Usuario.NombreCompleto</td>
+                                <td>@calificacion.Cliente.Usuario.NombreCompleto</td>
+                                <td>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="bi bi-star@(i <= calificacion.Puntuacion ? "-fill" : "") text-warning"></i>
+                                    }
+                                </td>
+                                <td>@calificacion.Comentario</td>
+                                <td>@calificacion.FechaCalificacion.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .stars {
+            color: #ffc107;
+        }
+    </style>
+} 

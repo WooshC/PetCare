@@ -21,8 +21,16 @@ CREATE TABLE Usuarios (
     FechaRegistro DATETIME DEFAULT GETDATE(),
     UltimoAcceso DATETIME,
     Activo BIT DEFAULT 1,
+    Verificado BIT DEFAULT 0,
     CONSTRAINT UQ_Email UNIQUE (Email)
 );
+GO
+
+-- Agregar columna Verificado si no existe
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Usuarios') AND name = 'Verificado')
+BEGIN
+    ALTER TABLE Usuarios ADD Verificado BIT DEFAULT 0;
+END
 GO
 
 CREATE TABLE Roles (
@@ -55,14 +63,15 @@ GO
 
 -- Insertar usuario administrador
 INSERT INTO Usuarios (
-    NombreUsuario, ContrasenaHash, Email, NombreCompleto, Telefono, Direccion
+    NombreUsuario, ContrasenaHash, Email, NombreCompleto, Telefono, Direccion, Verificado
 ) VALUES (
     'admin', 
     '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', -- Hash SHA256 de 'admin'
     'admin@petcare.com', 
     'Administrador del Sistema', 
     '0998887777',
-    'Calle Principal 123'
+    'Calle Principal 123',
+    1
 );
 GO
 
@@ -126,5 +135,19 @@ CREATE TABLE Calificaciones (
     Puntuacion INT NOT NULL CHECK (Puntuacion BETWEEN 1 AND 5),
     Comentario TEXT,
     FechaCalificacion DATETIME DEFAULT GETDATE()
+);
+GO
+
+-- Crear tabla Solicitudes
+CREATE TABLE Solicitudes (
+    SolicitudID INT IDENTITY(1,1) PRIMARY KEY,
+    ClienteID INT NOT NULL FOREIGN KEY REFERENCES Clientes(ClienteID),
+    CuidadorID INT NOT NULL FOREIGN KEY REFERENCES Cuidadores(CuidadorID),
+    FechaSolicitud DATETIME DEFAULT GETDATE(),
+    FechaInicio DATETIME NOT NULL,
+    FechaFin DATETIME NOT NULL,
+    Estado VARCHAR(20) DEFAULT 'Pendiente',
+    Descripcion TEXT,
+    PrecioTotal DECIMAL(10,2)
 );
 GO

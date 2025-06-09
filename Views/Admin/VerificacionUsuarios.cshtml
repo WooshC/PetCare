@@ -1,0 +1,136 @@
+@model IEnumerable<PetCare.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Verificación de Usuarios";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">Verificación de Usuarios</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Documentos Pendientes</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var usuario in Model)
+                        {
+                            var documentosPendientes = usuario.DocumentosVerificacion.Where(d => d.Estado == "Pendiente").ToList();
+                            if (documentosPendientes.Any())
+                            {
+                                <tr>
+                                    <td>@usuario.NombreCompleto</td>
+                                    <td>@usuario.Email</td>
+                                    <td>@usuario.Telefono</td>
+                                    <td>
+                                        @foreach (var doc in documentosPendientes)
+                                        {
+                                            <div class="mb-2">
+                                                <strong>@doc.TipoDocumento</strong>
+                                                <button class="btn btn-sm btn-info ml-2" onclick="verDocumento(@doc.DocumentoID)">
+                                                    Ver Documento
+                                                </button>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success btn-sm" onclick="verificarDocumento(@documentosPendientes.First().DocumentoID, true)">
+                                            Aprobar
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="verificarDocumento(@documentosPendientes.First().DocumentoID, false)">
+                                            Rechazar
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver documento -->
+<div class="modal fade" id="documentoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Documento de Verificación</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="documentoContenido"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para observaciones -->
+<div class="modal fade" id="observacionesModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Observaciones</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formObservaciones">
+                    <input type="hidden" id="documentoId" />
+                    <input type="hidden" id="esAprobado" />
+                    <div class="form-group">
+                        <label for="observaciones">Observaciones:</label>
+                        <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="enviarVerificacion()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function verDocumento(documentoId) {
+            $.get(`/Admin/ObtenerDocumento/${documentoId}`, function(data) {
+                $('#documentoContenido').html(`<img src="data:image/jpeg;base64,${data}" class="img-fluid" />`);
+                $('#documentoModal').modal('show');
+            });
+        }
+
+        function verificarDocumento(documentoId, aprobado) {
+            $('#documentoId').val(documentoId);
+            $('#esAprobado').val(aprobado);
+            $('#observacionesModal').modal('show');
+        }
+
+        function enviarVerificacion() {
+            const documentoId = $('#documentoId').val();
+            const aprobado = $('#esAprobado').val() === 'true';
+            const observaciones = $('#observaciones').val();
+
+            $.post('/Admin/VerificarDocumento', {
+                documentoId: documentoId,
+                aprobado: aprobado,
+                observaciones: observaciones
+            }, function() {
+                location.reload();
+            });
+        }
+    </script>
+} 

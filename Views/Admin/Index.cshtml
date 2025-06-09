@@ -1,0 +1,49 @@
+@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<div class="container mt-4">
+    <h2>Panel de Administración</h2>
+    
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Verificación de Usuarios</h5>
+                    <p class="card-text">Gestiona la verificación de documentos de usuarios.</p>
+                    <a asp-action="VerificacionUsuarios" class="btn btn-primary">Ir a Verificación</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reservas</h5>
+                    <p class="card-text">Visualiza y gestiona las reservas del sistema.</p>
+                    <a asp-action="Reservas" class="btn btn-primary">Ver Reservas</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Valoraciones</h5>
+                    <p class="card-text">Revisa las valoraciones y comentarios de los usuarios.</p>
+                    <a asp-action="Valoraciones" class="btn btn-primary">Ver Valoraciones</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Chat</h5>
+                    <p class="card-text">Accede al sistema de chat en tiempo real.</p>
+                    <a asp-controller="Chat" asp-action="Index" class="btn btn-primary">Ir al Chat</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
