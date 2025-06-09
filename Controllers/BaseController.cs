@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace PetCare.Controllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         protected readonly ApplicationDbContext _context;
         protected readonly RoleStrategyFactory _roleStrategyFactory;

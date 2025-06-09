@@ -1,0 +1,27 @@
+﻿@model PetCare.Models.ViewModels.ClienteDashboardViewModel
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body text-center">
+        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+             class="rounded-circle mb-3" width="150" alt="Foto perfil">
+        <h4>@Model.Cliente.Usuario.NombreCompleto</h4>
+        <p class="text-muted">Dueño de mascotas</p>
+
+        <div class="d-grid gap-2">
+            <a asp-action="Edit" asp-controller="Cliente" class="btn btn-outline-primary">Editar perfil</a>
+        </div>
+
+        <hr>
+
+        <div class="text-start">
+            <p><strong>Información de contacto:</strong></p>
+            <p><i class="bi bi-envelope me-2"></i> @Model.Cliente.Usuario.Email</p>
+            <p><i class="bi bi-telephone me-2"></i> @(Model.Cliente.Usuario.Telefono ?? "No especificado")</p>
+
+            @if (!string.IsNullOrEmpty(Model.Cliente.Usuario.Direccion))
+            {
+                <p><i class="bi bi-geo-alt me-2"></i> @Model.Cliente.Usuario.Direccion</p>
+            }
+        </div>
+    </div>
+</div>

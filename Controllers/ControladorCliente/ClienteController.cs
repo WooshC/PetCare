@@ -1,76 +1,78 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Models;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using PetCare.Models.ViewModels;
 using PetCare.Services;
 
-namespace PetCare.Controllers.ControladorCliente
+namespace PetCare.Controllers
 {
+    [Authorize(Roles = "Cliente")]
+    [Route("Cliente")]
     public class ClienteController : Controller
     {
-
         private readonly ApplicationDbContext _context;
-        private readonly ClienteStrategy _clienteStrategy;
+        private readonly ISolicitudService _solicitudService;
 
-        public ClienteController(ApplicationDbContext context)
+        public ClienteController(ApplicationDbContext context, ISolicitudService solicitudService)
         {
             _context = context;
-            _clienteStrategy = new ClienteStrategy();
+            _solicitudService = solicitudService;
         }
 
-        // Vista principal del cliente
-        public async Task<IActionResult> Cliente()
+        [HttpGet("Dashboard")]
+        [HttpGet("")] // Maneja tanto /Cliente como /Cliente/Dashboard
+        public async Task<IActionResult> Dashboard()
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.UsuarioID == 1); // Simulado
-            return await _clienteStrategy.HandleRequestAsync(_context, this, usuario);
-        }
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var viewModel = await ObtenerViewModel(userId);
 
-        [HttpPost]
-        public async Task<IActionResult> CrearSolicitud(Solicitud solicitud)
-        {
-            if (!ModelState.IsValid)
+            if (viewModel == null)
             {
-                TempData["Error"] = "Formulario inválido.";
-                return RedirectToAction("Cliente");
+                return NotFound();
             }
 
-            solicitud.FechaCreacion = DateTime.Now;
-            solicitud.Estado = "Pendiente";
-            solicitud.ClienteID = 1; // Simulado - reemplazar por ID real del cliente
-
-            // Temporalmente asignar a un cuidador por defecto (debería seleccionarse después)
-            solicitud.CuidadorID = _context.Cuidadores.Select(c => c.CuidadorID).FirstOrDefault();
-
-            _context.Solicitudes.Add(solicitud);
-            await _context.SaveChangesAsync();
-
-            TempData["MensajeExito"] = "Solicitud creada exitosamente.";
-            return RedirectToAction("Cliente");
+            return View("Cliente", viewModel); // Especifica el nombre de la vista
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Calificar(int SolicitudID, Calificacion calificacion)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Perfil(int id)
         {
-            var solicitud = await _context.Solicitudes
-                .Include(s => s.Cuidador)
-                .FirstOrDefaultAsync(s => s.SolicitudID == SolicitudID);
+            var viewModel = await ObtenerViewModel(id);
 
-            if (solicitud == null)
+            if (viewModel == null)
             {
-                TempData["Error"] = "Solicitud no encontrada.";
-                return RedirectToAction("Cliente");
+                return NotFound();
             }
 
-            calificacion.CuidadorID = solicitud.CuidadorID;
-            calificacion.ClienteID = solicitud.ClienteID;
-            calificacion.FechaCalificacion = DateTime.Now;
-
-            _context.Calificaciones.Add(calificacion);
-            await _context.SaveChangesAsync();
-
-            TempData["MensajeExito"] = "Servicio calificado correctamente.";
-            return RedirectToAction("Cliente");
+            return View("Cliente", viewModel); // Usa la misma vista
         }
 
+        private async Task<ClienteDashboardViewModel> ObtenerViewModel(int usuarioId)
+        {
+            var cliente = await _context.Clientes
+                .Include(c => c.Usuario)
+                .Include(c => c.Solicitudes)
+                    .ThenInclude(s => s.Cuidador)
+                        .ThenInclude(c => c.Usuario)
+                .FirstOrDefaultAsync(c => c.UsuarioID == usuarioId);
+
+            if (cliente == null)
+            {
+                return null;
+            }
+
+            return new ClienteDashboardViewModel
+            {
+                Cliente = cliente,
+                // Inicializamos las demás propiedades como listas vacías por ahora
+                SolicitudesPendientes = new List<Solicitud>(),
+                SolicitudesActivas = new List<Solicitud>(),
+                HistorialServicios = new List<Solicitud>(),
+            };
+        }
     }
 }

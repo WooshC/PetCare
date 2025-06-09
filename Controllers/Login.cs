@@ -14,19 +14,20 @@ namespace PetCare.Controllers
     public class LoginController : BaseController
     {
         public LoginController(
-        ApplicationDbContext context,
-        RoleStrategyFactory roleStrategyFactory)
-        : base(context, roleStrategyFactory)
+            ApplicationDbContext context,
+            RoleStrategyFactory roleStrategyFactory)
+            : base(context, roleStrategyFactory)
         {
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // Si el usuario ya está autenticado, redirigir según su rol
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("RedirectByRole", "Base");
+                var usuario = await GetCurrentUserAsync();
+                return await RedirectByRole(usuario);
             }
             return View();
         }
@@ -70,31 +71,24 @@ namespace PetCare.Controllers
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var authProperties = new AuthenticationProperties
-            {
-                // Configuraciones adicionales si son necesarias
-                IsPersistent = true // Para mantener la sesión
-            };
 
             await HttpContext.SignInAsync(
-         CookieAuthenticationDefaults.AuthenticationScheme,
-         new ClaimsPrincipal(claimsIdentity),
-         new AuthenticationProperties
-         {
-             IsPersistent = true,
-             AllowRefresh = true,
-             ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
-         });
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    AllowRefresh = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
+                });
 
             // Actualizar último acceso
             usuario.UltimoAcceso = DateTime.Now;
             await _context.SaveChangesAsync();
 
             // Redirigir según el rol usando la lógica del BaseController
-            if (usuario.Roles.Any(r => r.Rol.NombreRol == "Cuidador"))
-                return RedirectToAction("Dashboard", "Cuidador");
-
             return await RedirectByRole(usuario);
         }
 

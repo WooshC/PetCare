@@ -1,132 +1,25 @@
-﻿@model PetCare.Models.Cliente
+﻿@model PetCare.Models.ViewModels.ClienteDashboardViewModel
 @{
-    ViewData["Title"] = "Panel del Cliente";
+    ViewData["Title"] = "Perfil Cliente";
 }
 
 <div class="container mt-4">
     <div class="row">
-        <!-- Columna izquierda: perfil -->
+        <!-- Columna izquierda (info perfil) -->
         <div class="col-md-3">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body text-center">
-                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                         class="rounded-circle mb-3" width="150" alt="Foto perfil">
-                    <h4>@Model.Usuario.NombreCompleto</h4>
-                    <p class="text-muted">Cliente PetCare</p>
-                    <p class="text-muted small">@Model.Usuario.Email</p>
-
-                    <div class="d-grid gap-2 mt-3">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaSolicitudModal">
-                            <i class="bi bi-plus-circle"></i> Nueva Solicitud
-                        </button>
-                    </div>
-                </div>
-            </div>
+            @await Html.PartialAsync("_PerfilInfoCliente", Model)
         </div>
 
-        <!-- Columna derecha: solicitudes -->
+        <!-- Columna central (contenido principal) -->
         <div class="col-md-9">
-            <!-- Solicitudes activas -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <i class="bi bi-clipboard-check"></i> Solicitudes activas
-                </div>
-                <div class="card-body">
-                    @{
-                        var activas = Model.Solicitudes.Where(s => s.Estado == "Pendiente" || s.Estado == "Aceptada").ToList();
-                        int index = 0;
-                    }
-
-                    @if (activas.Any())
-                    {
-                        foreach (var solicitud in activas)
-                        {
-                            var collapseId = $"detalleSolicitud{index++}";
-                            <div class="alert alert-info">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong>@solicitud.TipoServicio</strong> con @solicitud.Cuidador.Usuario.NombreCompleto
-                                        <div class="text-muted small">
-                                            @solicitud.DuracionHoras horas - @solicitud.FechaHoraInicio.ToShortDateString()
-                                            <span class="badge bg-secondary ms-2">@solicitud.Estado</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId">
-                                            Ver Detalle
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Detalle desplegable (collapse) -->
-                                <div class="collapse mt-3" id="@collapseId">
-                                    @Html.Partial("_DetalleSolicitud", solicitud)
-                                </div>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <div class="alert alert-secondary text-center">No tienes solicitudes activas por el momento.</div>
-                    }
-                </div>
-            </div>
-
-            <!-- Solicitudes finalizadas -->
-            <div class="card shadow-sm">
-                <div class="card-header bg-success text-white">
-                    <i class="bi bi-clock-history"></i> Historial de solicitudes
-                </div>
-                <div class="card-body">
-                    @{
-                        var finalizadas = Model.Solicitudes.Where(s => s.Estado == "Finalizada" || s.Estado == "Rechazada").ToList();
-                    }
-
-                    @if (finalizadas.Any())
-                    {
-                        foreach (var solicitud in finalizadas)
-                        {
-                            <div class="list-group-item list-group-item-action mb-2">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">@solicitud.TipoServicio</h5>
-                                    <span class="badge bg-success">@solicitud.Estado</span>
-                                </div>
-                                <p class="mb-1">Cuidador: @solicitud.Cuidador.Usuario.NombreCompleto</p>
-                                <small class="text-muted">@solicitud.FechaHoraInicio.ToShortDateString() - @solicitud.DuracionHoras horas</small>
-
-                                @{
-                                    var fueCalificada = Model.Calificaciones.Any(c =>
-                                    c.ClienteID == solicitud.ClienteID &&
-                                    c.CuidadorID == solicitud.CuidadorID);
-                                }
-
-
-                                @if (solicitud.Estado == "Finalizada" && !fueCalificada)
-                                {
-                                    <div class="mt-2">
-                                        <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalCalificar"
-                                                data-solicitud-id="@solicitud.SolicitudID">
-                                            <i class="bi bi-star"></i> Calificar
-                                        </button>
-                                    </div>
-                                }
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <div class="alert alert-secondary text-center">Aún no tienes historial de solicitudes.</div>
-                    }
-                </div>
+            <!-- Aquí irán las demás secciones cuando las implementemos -->
+            <div class="alert alert-info">
+                Bienvenido a tu dashboard. Pronto podrás ver aquí tus solicitudes y cuidadores favoritos.
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal para nueva solicitud -->
-@Html.Partial("~/Views/Cliente/_ModalNuevaSolicitud.cshtml", new PetCare.Models.Solicitud())
-
-<!-- Modal para calificar -->
-@Html.Partial("~/Views/Cliente/_ModalCalificar.cshtml", new PetCare.Models.Calificacion())
-
-                        
+@section Styles {
+    @await Html.PartialAsync("_StylesPartial")
+}
