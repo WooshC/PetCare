@@ -20,3 +20,20 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* ==== Estilos de Chat (cliente y cuidador) ==== */
+
+.chat-message.sent {
+    text-align: right;
+    margin-left: 20%;
+}
+
+.chat-message.received {
+    text-align: left;
+    margin-right: 20%;
+}
+
+.message-content {
+    display: inline-block;
+    max-width: 80%;
+}

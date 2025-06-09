@@ -45,15 +45,4 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        const modalCalificar = document.getElementById('modalCalificar');
-        modalCalificar.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const solicitudId = button.getAttribute('data-solicitud-id');
-            const input = modalCalificar.querySelector('#solicitudIdInput');
-            input.value = solicitudId;
-        });
-    </script>
-}
 

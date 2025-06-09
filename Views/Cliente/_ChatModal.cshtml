@@ -1,0 +1,32 @@
+﻿<!-- Modal para chat (cliente) -->
+<div class="modal fade" id="chatModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chat con <span id="chatUserName">Cuidador</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" style="height: 400px; overflow-y: auto;">
+                <!-- Mensajes simulados -->
+                <div class="chat-message received mb-2">
+                    <div class="message-content bg-light p-2 rounded">
+                        <small class="text-muted">Cuidador - 10:30 AM</small>
+                        <p>Hola, ¿cómo estás? ¿Quieres que recoja a tu mascota en la tarde?</p>
+                    </div>
+                </div>
+                <div class="chat-message sent mb-2">
+                    <div class="message-content bg-primary text-white p-2 rounded">
+                        <small class="text-white-50">Tú - 10:31 AM</small>
+                        <p>Sí, por favor a las 3 p.m.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Escribe un mensaje...">
+                    <button class="btn btn-primary" type="button">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

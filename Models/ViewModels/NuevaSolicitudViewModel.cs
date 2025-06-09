@@ -18,5 +18,10 @@ namespace PetCare.Models.ViewModels
 
         [Required]
         public string Descripcion { get; set; }
+
+        [Display(Name = "Hora deseada")]
+        [DataType(DataType.Time)]
+        public TimeSpan? HoraDeseada { get; set; }
+
     }
 }

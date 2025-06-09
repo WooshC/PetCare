@@ -55,7 +55,9 @@ namespace PetCare.Controllers.ControladorCliente
                 Descripcion = modelo.Descripcion,
                 Estado = "Pendiente",
                 FechaCreacion = DateTime.Now,
-                FechaHoraInicio = DateTime.Now
+                FechaHoraInicio = DateTime.Now,
+                HoraDeseada = modelo.HoraDeseada
+
             };
 
             _context.Solicitudes.Add(solicitud);
@@ -65,6 +67,29 @@ namespace PetCare.Controllers.ControladorCliente
             return RedirectToAction("Cliente");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AsignarCuidador(int solicitudId, int cuidadorId)
+        {
+            // Creamos una solicitud "fantasma" solo con el ID
+            var solicitud = new Solicitud { SolicitudID = solicitudId };
+
+            // Adjuntamos la entidad al contexto para que EF pueda rastrearla
+            _context.Solicitudes.Attach(solicitud);
+
+            // Asignamos el nuevo cuidador y la fecha
+            solicitud.CuidadorID = cuidadorId;
+            solicitud.FechaActualizacion = DateTime.Now;
+
+            // Indicamos explícitamente que esas propiedades cambiaron
+            _context.Entry(solicitud).Property(s => s.CuidadorID).IsModified = true;
+            _context.Entry(solicitud).Property(s => s.FechaActualizacion).IsModified = true;
+
+            // Guardamos los cambios
+            await _context.SaveChangesAsync();
+
+            TempData["MensajeExito"] = "Has solicitado a un cuidador. Espera su confirmación.";
+            return RedirectToAction("Cliente");
+        }
 
 
 

@@ -36,7 +36,12 @@
                             Ver detalle
                         </button>
                     </div>
+
                     <div id="@cuidadorId" class="collapse">
+                        @* Aquí asignamos la solicitud ID para que la partial del cuidador la pueda usar *@
+                        @{
+                            ViewData["SolicitudID"] = Model.SolicitudID;
+                        }
                         @Html.Partial("~/Views/Cliente/_DetalleCuidador.cshtml", cuidador)
                     </div>
                 </div>

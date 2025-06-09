@@ -20,6 +20,12 @@ namespace PetCare.Models
 
         public DateTime FechaHoraInicio { get; set; }
 
+        [Display(Name = "Hora deseada")]
+        [DataType(DataType.Time)]
+        [Column(TypeName = "time")]
+        public TimeSpan? HoraDeseada { get; set; }
+
+
         [Required]
         [Range(1, int.MaxValue)]
         public int DuracionHoras { get; set; }
