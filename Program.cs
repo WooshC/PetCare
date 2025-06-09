@@ -38,7 +38,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Servicios
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ISolicitudService, SolicitudService>();
-
+builder.Services.AddScoped<ISolicitudClienteService, SolicitudClienteService>();
 // Registro de estrategias
 builder.Services.AddScoped<AdminStrategy>();
 builder.Services.AddScoped<CuidadorStrategy>();

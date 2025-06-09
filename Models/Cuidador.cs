@@ -36,6 +36,8 @@ namespace PetCare.Models
         [StringLength(100)]
         public string Ciudad { get; set; } = string.Empty;
 
+        public bool Disponible { get; set; } = true; // <- Nueva propiedad añadida
+
         // Propiedades de navegación
         public Usuario Usuario { get; set; } = null!;
         public ICollection<Calificacion> Calificaciones { get; set; } = new List<Calificacion>();
@@ -47,6 +49,15 @@ namespace PetCare.Models
             CalificacionPromedio = Calificaciones.Any()
                 ? (decimal)Calificaciones.Average(c => c.Puntuacion)
                 : 0.0m;
+        }
+
+        // Método para actualizar la disponibilidad basado en las solicitudes
+        public void ActualizarDisponibilidad()
+        {
+            // Un cuidador no está disponible si tiene solicitudes en estados activos
+            Disponible = !Solicitudes.Any(s => s.Estado == "Aceptada" ||
+                                             s.Estado == "En Progreso" ||
+                                             s.Estado == "Fuera de Tiempo");
         }
     }
 }
