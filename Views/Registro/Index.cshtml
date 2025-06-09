@@ -1,118 +1,208 @@
 ﻿@model PetCare.Controllers.RegistroViewModel
 
 @{
-    ViewData["Title"] = "Registro de Usuario";
+    ViewData["Title"] = "Registro de Usuario - PetCare";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <h2 class="text-center">@ViewData["Title"]</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center mb-0">
+                        <i class="bi bi-person-plus-fill"></i> Regístrate en PetCare
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Index" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-        <form asp-action="Index" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="NombreCompleto" class="form-control" placeholder="Nombre Completo" required />
+                                    <label asp-for="NombreCompleto">Nombre Completo</label>
+                                    <span asp-validation-for="NombreCompleto" class="invalid-feedback"></span>
+                                </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="NombreCompleto" class="control-label"></label>
-                        <input asp-for="NombreCompleto" class="form-control" />
-                        <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Email" class="form-control" placeholder="nombre@ejemplo.com" required />
+                                    <label asp-for="Email"></label>
+                                    <span asp-validation-for="Email" class="invalid-feedback"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="NombreUsuario" class="form-control" placeholder="Nombre de Usuario" required />
+                                    <label asp-for="NombreUsuario">Nombre Usuario</label>
+                                    <span asp-validation-for="NombreUsuario" class="invalid-feedback"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Password" type="password" class="form-control" placeholder="Contraseña" required />
+                                    <label asp-for="Password">Contraseña</label>
+                                    <span asp-validation-for="Password" class="invalid-feedback"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirmar Contraseña" required />
+                                    <label asp-for="ConfirmPassword">Confirmar Contraseña</label>
+                                    <span asp-validation-for="ConfirmPassword" class="invalid-feedback"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Telefono" class="form-control" placeholder="Teléfono" required />
+                                    <label asp-for="Telefono"></label>
+                                    <span asp-validation-for="Telefono" class="invalid-feedback"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Direccion" class="form-control" placeholder="Dirección" />
+                            <label asp-for="Direccion"></label>
+                            <span asp-validation-for="Direccion" class="invalid-feedback"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select asp-for="TipoUsuario" class="form-select" id="tipoUsuarioSelect" required>
+                                <option value="">Seleccione un tipo de usuario</option>
+                                <option value="Cliente">Cliente</option>
+                                <option value="Cuidador">Cuidador</option>
+                            </select>
+                            <label asp-for="TipoUsuario">Tipo de usuario</label>
+                            <span asp-validation-for="TipoUsuario" class="invalid-feedback"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="DocumentoIdentidad" class="form-control" placeholder="Documento de Identidad" required />
+                            <label asp-for="DocumentoIdentidad">Documento de Identidad</label>
+                            <span asp-validation-for="DocumentoIdentidad" class="invalid-feedback"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DocumentoIdentidadArchivo" class="form-label">
+                                <i class="bi bi-file-earmark-arrow-up"></i> Suba una copia de su documento de identidad
+                            </label>
+                            <input asp-for="DocumentoIdentidadArchivo" type="file" class="form-control" required />
+                            <span asp-validation-for="DocumentoIdentidadArchivo" class="invalid-feedback"></span>
+                        </div>
+
+                        <div id="cuidadorFields" style="display: none;">
+                            <div class="form-floating mb-3">
+                                <input asp-for="TelefonoEmergencia" class="form-control" placeholder="Teléfono de Emergencia" />
+                                <label asp-for="TelefonoEmergencia">Teléfono de Emergencia</label>
+                                <span asp-validation-for="TelefonoEmergencia" class="invalid-feedback"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="ComprobanteServiciosArchivo" class="form-label">
+                                    <i class="bi bi-file-earmark-arrow-up"></i> Comprobante de servicios previos (factura, contrato, etc.)
+                                </label>
+                                <input asp-for="ComprobanteServiciosArchivo" type="file" class="form-control" />
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <textarea asp-for="Biografia" class="form-control" placeholder="Biografía" style="height: 100px"></textarea>
+                                <label asp-for="Biografia"></label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <textarea asp-for="Experiencia" class="form-control" placeholder="Experiencia" style="height: 100px"></textarea>
+                                <label asp-for="Experiencia"></label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input asp-for="TarifaPorHora" type="number" step="0.01" class="form-control" placeholder="Tarifa por Hora" />
+                                <label asp-for="TarifaPorHora">Tarifa por Hora</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <select asp-for="Ciudad" class="form-select" required>
+                                    <option value="">Seleccione una ciudad</option>
+                                    <option value="Quito">Quito</option>
+                                    <option value="Guayaquil">Guayaquil</option>
+                                    <option value="Cuenca">Cuenca</option>
+                                    <option value="Santo Domingo">Santo Domingo</option>
+                                    <option value="Machala">Machala</option>
+                                    <option value="Durán">Durán</option>
+                                    <option value="Portoviejo">Portoviejo</option>
+                                    <option value="Manta">Manta</option>
+                                    <option value="Loja">Loja</option>
+                                    <option value="Ambato">Ambato</option>
+                                    <option value="Esmeraldas">Esmeraldas</option>
+                                    <option value="Quevedo">Quevedo</option>
+                                    <option value="Riobamba">Riobamba</option>
+                                    <option value="Milagro">Milagro</option>
+                                    <option value="Ibarra">Ibarra</option>
+                                    <option value="Latacunga">Latacunga</option>
+                                    <option value="Tulcán">Tulcán</option>
+                                    <option value="Babahoyo">Babahoyo</option>
+                                    <option value="La Libertad">La Libertad</option>
+                                    <option value="Daule">Daule</option>
+                                    <option value="Sangolquí">Sangolquí</option>
+                                    <option value="Nueva Loja">Nueva Loja</option>
+                                    <option value="El Carmen">El Carmen</option>
+                                    <option value="Santa Elena">Santa Elena</option>
+                                    <option value="Otavalo">Otavalo</option>
+                                    <option value="Chone">Chone</option>
+                                    <option value="Huaquillas">Huaquillas</option>
+                                    <option value="Pasaje">Pasaje</option>
+                                    <option value="Santa Rosa">Santa Rosa</option>
+                                    <option value="Jipijapa">Jipijapa</option>
+                                    <option value="La Troncal">La Troncal</option>
+                                    <option value="Cayambe">Cayambe</option>
+                                    <option value="Buena Fe">Buena Fe</option>
+                                    <option value="Salinas">Salinas</option>
+                                    <option value="Ventanas">Ventanas</option>
+                                    <option value="Azogues">Azogues</option>
+                                    <option value="Bahía de Caráquez">Bahía de Caráquez</option>
+                                    <option value="La Concordia">La Concordia</option>
+                                    <option value="Pedro Carbo">Pedro Carbo</option>
+                                    <option value="Calceta">Calceta</option>
+                                    <option value="Tena">Tena</option>
+                                    <option value="El Triunfo">El Triunfo</option>
+                                    <option value="Naranjal">Naranjal</option>
+                                    <option value="Balzar">Balzar</option>
+                                    <option value="Macas">Macas</option>
+                                    <option value="Puyo">Puyo</option>
+                                    <option value="Zamora">Zamora</option>
+                                    <option value="Atuntaqui">Atuntaqui</option>
+                                    <option value="Catamayo">Catamayo</option>
+                                    <option value="Alfredo Baquerizo Moreno">Alfredo Baquerizo Moreno</option>
+                                    <option value="Valencia">Valencia</option>
+                                    <option value="El Guabo">El Guabo</option>
+                                    <option value="San Lorenzo">San Lorenzo</option>
+                                    <option value="Balao">Balao</option>
+                                    <option value="Pedro Vicente Maldonado">Pedro Vicente Maldonado</option>
+                                    <option value="Palestina">Palestina</option>
+                                    <option value="Puerto Francisco de Orellana">Puerto Francisco de Orellana</option>
+                                    <option value="Puerto Baquerizo Moreno">Puerto Baquerizo Moreno</option>
+                                </select>
+                                <label asp-for="Ciudad"></label>
+                                <span asp-validation-for="Ciudad" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-person-plus"></i> Registrarse
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="mb-2">¿Ya tienes una cuenta?</p>
+                        <a asp-controller="Login" asp-action="Index" class="btn btn-outline-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Inicia Sesión
+                        </a>
                     </div>
-
-                    <div class="form-group">
-                        <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="NombreUsuario" class="control-label"></label>
-                        <input asp-for="NombreUsuario" class="form-control" />
-                        <span asp-validation-for="NombreUsuario" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" type="password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="ConfirmPassword" class="control-label"></label>
-                        <input asp-for="ConfirmPassword" type="password" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Telefono" class="control-label"></label>
-                        <input asp-for="Telefono" class="form-control" />
-                        <span asp-validation-for="Telefono" class="text-danger"></span>
-                    </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Direccion" class="control-label"></label>
-                <input asp-for="Direccion" class="form-control" />
-                <span asp-validation-for="Direccion" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="TipoUsuario" class="control-label"></label>
-                <select asp-for="TipoUsuario" class="form-control" id="tipoUsuarioSelect">
-                    <option value="Cliente">Cliente</option>
-                    <option value="Cuidador">Cuidador</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DocumentoIdentidad" class="control-label"></label>
-                <input asp-for="DocumentoIdentidad" class="form-control" />
-                <span asp-validation-for="DocumentoIdentidad" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DocumentoIdentidadArchivo" class="control-label"></label>
-                <input asp-for="DocumentoIdentidadArchivo" type="file" class="form-control" />
-                <span asp-validation-for="DocumentoIdentidadArchivo" class="text-danger"></span>
-                <small class="form-text text-muted">Suba una copia de su documento de identidad</small>
-            </div>
-
-            <div id="cuidadorFields" style="display: none;">
-                <div class="form-group">
-                    <label asp-for="TelefonoEmergencia" class="control-label"></label>
-                    <input asp-for="TelefonoEmergencia" class="form-control" />
-                    <span asp-validation-for="TelefonoEmergencia" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="ComprobanteServiciosArchivo" class="control-label"></label>
-                    <input asp-for="ComprobanteServiciosArchivo" type="file" class="form-control" />
-                    <small class="form-text text-muted">Suba un comprobante de servicios previos (factura, contrato, etc.)</small>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Biografia" class="control-label"></label>
-                    <textarea asp-for="Biografia" class="form-control" rows="3"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Experiencia" class="control-label"></label>
-                    <textarea asp-for="Experiencia" class="form-control" rows="3"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="TarifaPorHora" class="control-label"></label>
-                    <input asp-for="TarifaPorHora" type="number" step="0.01" class="form-control" />
-                </div>
-            </div>
-
-            <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary">Registrarse</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -122,17 +212,64 @@
     }
 
     <script>
+        // Mostrar/ocultar campos de cuidador
         document.getElementById('tipoUsuarioSelect').addEventListener('change', function() {
-            if (this.value === 'Cuidador') {
-                document.getElementById('cuidadorFields').style.display = 'block';
-            } else {
-                document.getElementById('cuidadorFields').style.display = 'none';
-            }
+            const cuidadorFields = document.getElementById('cuidadorFields');
+            cuidadorFields.style.display = this.value === 'Cuidador' ? 'block' : 'none';
+
+            // Hacer campos requeridos solo si es cuidador
+            const cuidadorInputs = cuidadorFields.querySelectorAll('[required]');
+            cuidadorInputs.forEach(input => {
+                input.required = this.value === 'Cuidador';
+            });
         });
 
-        // Mostrar campos correctos al cargar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('tipoUsuarioSelect').dispatchEvent(new Event('change'));
-        });
+        // Validación del formulario
+        (() => {
+            'use strict'
+            const form = document.querySelector('.needs-validation')
+
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })()
     </script>
+
+    <style>
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .btn-outline-primary:hover {
+            color: white;
+        }
+
+        .invalid-feedback {
+            display: block;
+        }
+
+        .was-validated .form-control:invalid,
+        .was-validated .form-select:invalid {
+            border-color: #dc3545;
+        }
+
+        .was-validated .form-control:valid,
+        .was-validated .form-select:valid {
+            border-color: #198754;
+        }
+    </style>
 }

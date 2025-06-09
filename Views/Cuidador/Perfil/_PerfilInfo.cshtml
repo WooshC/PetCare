@@ -1,0 +1,59 @@
+﻿@model PetCare.Models.ViewModels.CuidadorDashboardViewModel
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body text-center">
+        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+             class="rounded-circle mb-3" width="150" alt="Foto perfil">
+        <h4>@Model.Cuidador.Usuario.NombreCompleto</h4>
+        <p class="text-muted">Cuidador profesional</p>
+
+        <div class="mb-3">
+            @{
+                var promedio = Model.Cuidador.CalificacionPromedio;
+                var tieneCalificaciones = Model.Cuidador.Calificaciones.Any();
+            }
+
+            <div class="star-rating">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <i class="bi @(i <= promedio ? "bi-star-fill" : "bi-star") text-warning"></i>
+                }
+                <span>(@(tieneCalificaciones ? promedio.ToString("0.0") : "0.0")/5.0)</span>
+            </div>
+            <small class="text-muted">
+                @(tieneCalificaciones ? $"{Model.Cuidador.Calificaciones.Count} calificaciones" : "Sin calificaciones")
+            </small>
+        </div>
+
+        <div class="d-grid gap-2">
+            <a asp-action="Edit" asp-controller="Cuidador" class="btn btn-outline-primary">Editar perfil</a>
+        </div>
+
+        <hr>
+
+        <div class="text-start">
+            <p><strong>Biografía:</strong></p>
+            <p class="text-muted">@(Model.Cuidador.Biografia ?? "No hay biografía disponible")</p>
+
+            <p><strong>Experiencia:</strong></p>
+            <p class="text-muted">@(Model.Cuidador.Experiencia ?? "No especificada")</p>
+
+            <p><strong>Servicios:</strong></p>
+            <ul>
+                <li>Paseos</li>
+                <li>Guardería</li>
+                <li>Visitas a domicilio</li>
+            </ul>
+
+            <p><strong>Tarifa por hora:</strong></p>
+            <p>@(Model.Cuidador.TarifaPorHora?.ToString("C") ?? "No especificada")</p>
+
+            <p><strong>Horario de atención:</strong></p>
+            <p>@(Model.Cuidador.HorarioAtencion ?? "No especificado")</p>
+
+            <p><strong>Contacto:</strong></p>
+            <p><i class="bi bi-envelope"></i> @Model.Cuidador.Usuario.Email</p>
+            <p><i class="bi bi-telephone"></i> @Model.Cuidador.Usuario.Telefono</p>
+        </div>
+    </div>
+</div>

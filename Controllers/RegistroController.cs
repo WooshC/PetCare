@@ -74,7 +74,8 @@ namespace PetCare.Controllers
                         TelefonoEmergencia = model.TelefonoEmergencia,
                         Biografia = model.Biografia,
                         Experiencia = model.Experiencia,
-                        TarifaPorHora = model.TarifaPorHora
+                        TarifaPorHora = model.TarifaPorHora,
+                        Ciudad = model.Ciudad ?? "Ciudad no especificada"
                     };
 
                     // Procesar archivos subidos (ejemplo simplificado)
@@ -171,5 +172,8 @@ namespace PetCare.Controllers
         public string? Biografia { get; set; }
         public string? Experiencia { get; set; }
         public decimal? TarifaPorHora { get; set; }
+        [Required(ErrorMessage = "La ciudad es requerida")]
+        [Display(Name = "Ciudad")]
+        public string? Ciudad { get; set; }
     }
 }
