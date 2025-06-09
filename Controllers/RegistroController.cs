@@ -39,6 +39,13 @@ namespace PetCare.Controllers
                     return View(model);
                 }
 
+                // Validación específica para tipo de usuario
+                if (model.TipoUsuario == "Cuidador" && model.ComprobanteServiciosArchivo == null)
+                {
+                    ModelState.AddModelError("ComprobanteServiciosArchivo", "El comprobante de servicios es requerido para cuidadores");
+                    return View(model);
+                }
+
                 // Crear nuevo usuario
                 var usuario = new Usuario
                 {
@@ -56,7 +63,7 @@ namespace PetCare.Controllers
                 await _context.SaveChangesAsync();
 
                 // Asignar rol según el tipo de usuario
-                int rolId = model.TipoUsuario == "Cuidador" ? 2 : 3;
+                int rolId = model.TipoUsuario == "Cuidador" ? 2 : 3; // Asegúrate que estos IDs coincidan con tu base de datos
                 _context.UsuarioRoles.Add(new UsuarioRol
                 {
                     UsuarioID = usuario.UsuarioID,
@@ -64,28 +71,37 @@ namespace PetCare.Controllers
                     FechaAsignacion = DateTime.Now
                 });
 
+                // Manejo de archivos
+                byte[] documentoIdentidadBytes = null;
+                if (model.DocumentoIdentidadArchivo != null && model.DocumentoIdentidadArchivo.Length > 0)
+                {
+                    using var memoryStream = new MemoryStream();
+                    await model.DocumentoIdentidadArchivo.CopyToAsync(memoryStream);
+                    documentoIdentidadBytes = memoryStream.ToArray();
+                }
+
                 // Crear registro específico según el tipo de usuario
                 if (model.TipoUsuario == "Cuidador")
                 {
+                    if (string.IsNullOrEmpty(model.Ciudad))
+                    {
+                        ModelState.AddModelError("Ciudad", "La ciudad es requerida para cuidadores");
+                        return View(model);
+                    }
+
                     var cuidador = new Cuidador
                     {
                         UsuarioID = usuario.UsuarioID,
                         DocumentoIdentidad = model.DocumentoIdentidad,
+                        DocumentoIdentidadArchivo = documentoIdentidadBytes,
                         TelefonoEmergencia = model.TelefonoEmergencia,
                         Biografia = model.Biografia,
                         Experiencia = model.Experiencia,
-                        TarifaPorHora = model.TarifaPorHora,
-                        Ciudad = model.Ciudad ?? "Ciudad no especificada"
+                        TarifaPorHora = model.TarifaPorHora ?? 0,
+                        Ciudad = model.Ciudad
                     };
 
-                    // Procesar archivos subidos (ejemplo simplificado)
-                    if (model.DocumentoIdentidadArchivo != null && model.DocumentoIdentidadArchivo.Length > 0)
-                    {
-                        using var memoryStream = new MemoryStream();
-                        await model.DocumentoIdentidadArchivo.CopyToAsync(memoryStream);
-                        cuidador.DocumentoIdentidadArchivo = memoryStream.ToArray();
-                    }
-
+                    // Procesar archivo de comprobante solo para cuidadores
                     if (model.ComprobanteServiciosArchivo != null && model.ComprobanteServiciosArchivo.Length > 0)
                     {
                         using var memoryStream = new MemoryStream();
@@ -100,15 +116,9 @@ namespace PetCare.Controllers
                     var cliente = new Cliente
                     {
                         UsuarioID = usuario.UsuarioID,
-                        DocumentoIdentidad = model.DocumentoIdentidad
+                        DocumentoIdentidad = model.DocumentoIdentidad,
+                        DocumentoIdentidadArchivo = documentoIdentidadBytes
                     };
-
-                    if (model.DocumentoIdentidadArchivo != null && model.DocumentoIdentidadArchivo.Length > 0)
-                    {
-                        using var memoryStream = new MemoryStream();
-                        await model.DocumentoIdentidadArchivo.CopyToAsync(memoryStream);
-                        cliente.DocumentoIdentidadArchivo = memoryStream.ToArray();
-                    }
 
                     _context.Clientes.Add(cliente);
                 }
@@ -156,7 +166,7 @@ namespace PetCare.Controllers
 
         public string? Direccion { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Seleccione un tipo de usuario")]
         public string TipoUsuario { get; set; } = "Cliente";
 
         // Campos comunes
@@ -168,12 +178,17 @@ namespace PetCare.Controllers
 
         // Campos específicos para cuidadores
         public string? TelefonoEmergencia { get; set; }
+
+        [Display(Name = "Comprobante de servicios (solo cuidadores)")]
         public IFormFile? ComprobanteServiciosArchivo { get; set; }
+
         public string? Biografia { get; set; }
         public string? Experiencia { get; set; }
+
+        [Range(0, 100, ErrorMessage = "La tarifa debe estar entre 0 y 100")]
         public decimal? TarifaPorHora { get; set; }
-        [Required(ErrorMessage = "La ciudad es requerida")]
-        [Display(Name = "Ciudad")]
+
+        [Display(Name = "Ciudad (solo cuidadores)")]
         public string? Ciudad { get; set; }
     }
 }

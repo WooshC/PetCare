@@ -23,6 +23,11 @@ namespace PetCare.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            // Si el usuario ya está autenticado, redirigir según su rol
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("RedirectByRole", "Base");
+            }
             return View();
         }
 
@@ -65,7 +70,7 @@ namespace PetCare.Controllers
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
             {
                 // Configuraciones adicionales si son necesarias
@@ -73,23 +78,24 @@ namespace PetCare.Controllers
             };
 
             await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+         CookieAuthenticationDefaults.AuthenticationScheme,
+         new ClaimsPrincipal(claimsIdentity),
+         new AuthenticationProperties
+         {
+             IsPersistent = true,
+             AllowRefresh = true,
+             ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
+         });
 
             // Actualizar último acceso
             usuario.UltimoAcceso = DateTime.Now;
             await _context.SaveChangesAsync();
 
             // Redirigir según el rol usando la lógica del BaseController
-            return await RedirectByRole(usuario);
-        }
+            if (usuario.Roles.Any(r => r.Rol.NombreRol == "Cuidador"))
+                return RedirectToAction("Dashboard", "Cuidador");
 
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return await RedirectByRole(usuario);
         }
 
         private string HashPassword(string input)

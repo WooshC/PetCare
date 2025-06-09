@@ -45,6 +45,14 @@ builder.Services.AddScoped<CuidadorStrategy>();
 builder.Services.AddScoped<ClienteStrategy>();
 builder.Services.AddScoped<RoleStrategyFactory>();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
 var app = builder.Build();
 
 // Middleware pipeline
@@ -62,6 +70,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseSession();
+
 // Orden CORRECTO: Authentication antes de Authorization
 app.UseAuthentication();
 app.UseAuthorization();
@@ -69,6 +79,11 @@ app.UseAuthorization();
 // Configuración de rutas
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "redirect",
+    pattern: "Redirect/ToDashboard",
+    defaults: new { controller = "Redirect", action = "ToDashboard" });
 
 app.Run();

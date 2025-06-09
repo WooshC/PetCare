@@ -1,8 +1,63 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Bienvenido a PetCare";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h1 class="display-4 fw-bold mb-4">Cuidado profesional para tus mascotas</h1>
+            <p class="lead mb-4">Encuentra cuidadores confiables y apasionados que tratarán a tus mascotas como parte de su familia.</p>
+
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Por favor inicia sesión o regístrate para acceder a nuestros servicios.
+                </div>
+                  <div class="d-grid gap-2 d-md-flex">
+                    <a asp-controller="Login" asp-action="Index" class="btn btn-primary btn-lg px-4 me-md-2">Iniciar Sesión</a>
+                    <a asp-controller="Registro" asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">Registrarse</a>
+                </div>
+            }
+      
+        </div>
+        <div class="col-md-6">
+            <img src="/images/pets-hero.jpg" alt="Mascotas felices" class="img-fluid rounded shadow">
+        </div>
+    </div>
+</div>
+
+<!-- Sección de características -->
+<div class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">¿Por qué elegir PetCare?</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-shield-check text-primary fs-1 mb-3"></i>
+                        <h3 class="h4">Cuidadores verificados</h3>
+                        <p>Todos nuestros cuidadores pasan por un riguroso proceso de selección y verificación de antecedentes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-house-heart text-primary fs-1 mb-3"></i>
+                        <h3 class="h4">Cuidado en casa</h3>
+                        <p>Tu mascota se quedará en un ambiente familiar y cómodo, no en una fría perrera.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-chat-square-heart text-primary fs-1 mb-3"></i>
+                        <h3 class="h4">Actualizaciones diarias</h3>
+                        <p>Recibirás fotos y actualizaciones para que sepas que tu mascota está feliz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
