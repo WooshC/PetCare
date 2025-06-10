@@ -10,10 +10,21 @@ namespace PetCare.Services
     public class SolicitudClienteService : ISolicitudClienteService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICuidadorService _cuidadorService;
 
-        public SolicitudClienteService(ApplicationDbContext context)
+        public SolicitudClienteService(ApplicationDbContext context, ICuidadorService cuidadorService)
         {
             _context = context;
+            _cuidadorService = cuidadorService;
+        }
+
+        public async Task<IEnumerable<Cuidador>> GetCuidadoresDisponibles()
+        {
+            if (_cuidadorService == null)
+            {
+                throw new InvalidOperationException("CuidadorService no está inicializado");
+            }
+            return await _cuidadorService.GetCuidadoresDisponibles();
         }
 
         public async Task<IEnumerable<Solicitud>> GetSolicitudesPendientes(int clienteId)
@@ -64,7 +75,7 @@ namespace PetCare.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Cuidador>> GetCuidadoresDisponibles()
+        /*public async Task<IEnumerable<Cuidador>> GetCuidadoresDisponibles()
         {
             var ahora = DateTime.Now;
 
@@ -85,5 +96,7 @@ namespace PetCare.Services
                 .OrderByDescending(c => c.CalificacionPromedio)
                 .ToListAsync();
         }
+        */
+
     }
 }

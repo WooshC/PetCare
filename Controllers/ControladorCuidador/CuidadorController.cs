@@ -65,6 +65,9 @@ namespace PetCare.Controllers
 
         private async Task<CuidadorDashboardViewModel> ObtenerViewModel(int usuarioId)
         {
+            // Mensaje de depuración para el inicio del método
+            Console.WriteLine($"Iniciando ObtenerViewModel para usuarioId: {usuarioId}");
+
             var cuidador = await _context.Cuidadores
                 .Include(c => c.Usuario)
                 .Include(c => c.Calificaciones)
@@ -74,18 +77,38 @@ namespace PetCare.Controllers
 
             if (cuidador == null)
             {
+                Console.WriteLine($"No se encontró cuidador con usuarioId: {usuarioId}");
                 return null;
             }
 
+            // Mensaje de depuración para el estado de disponibilidad
+            Console.WriteLine($"Cuidador encontrado - ID: {cuidador.CuidadorID}, Disponible: {cuidador.Disponible}");
+
             cuidador.ActualizarPromedio();
+
+            // Obtener las solicitudes
+            var solicitudesFueraDeTiempo = await _solicitudService.GetSolicitudesFueraDeTiempo(cuidador.CuidadorID) ?? new List<Solicitud>();
+            var solicitudesPendientes = await _solicitudService.GetSolicitudesPendientes(cuidador.CuidadorID);
+            var solicitudesActivas = await _solicitudService.GetSolicitudesActivas(cuidador.CuidadorID) ?? new List<Solicitud>();
+            var historialServicios = await _solicitudService.GetHistorialServicios(cuidador.CuidadorID);
+
+            // Mensajes de depuración para las solicitudes
+            Console.WriteLine($"Solicitudes fuera de tiempo: {solicitudesFueraDeTiempo.Count()}");
+            Console.WriteLine($"Solicitudes pendientes: {solicitudesPendientes.Count()}");
+            Console.WriteLine($"Solicitudes activas: {solicitudesActivas.Count()}");
+            Console.WriteLine($"Historial de servicios: {historialServicios.Count()}");
+
+            // Actualizar disponibilidad basado en las solicitudes activas
+            cuidador.ActualizarDisponibilidad();
+            Console.WriteLine($"Disponibilidad después de actualizar: {cuidador.Disponible}");
 
             return new CuidadorDashboardViewModel
             {
                 Cuidador = cuidador,
-                SolicitudesFueraDeTiempo = await _solicitudService.GetSolicitudesFueraDeTiempo(cuidador.CuidadorID) ?? new List<Solicitud>(),
-                SolicitudesPendientes = await _solicitudService.GetSolicitudesPendientes(cuidador.CuidadorID),
-                SolicitudesActivas = await _solicitudService.GetSolicitudesActivas(cuidador.CuidadorID) ?? new List<Solicitud>(),
-                HistorialServicios = await _solicitudService.GetHistorialServicios(cuidador.CuidadorID)
+                SolicitudesFueraDeTiempo = solicitudesFueraDeTiempo,
+                SolicitudesPendientes = solicitudesPendientes,
+                SolicitudesActivas = solicitudesActivas,
+                HistorialServicios = historialServicios
             };
         }
     }

@@ -11,6 +11,7 @@ namespace PetCare.Models.ViewModels
         public IEnumerable<Solicitud> SolicitudesActivas { get; set; }
         public IEnumerable<Solicitud> SolicitudesEnProgreso { get; set; }
         public IEnumerable<Solicitud> HistorialServicios { get; set; }
+        public IEnumerable<Cuidador> CuidadoresDisponibles { get; set; }
 
 
     }

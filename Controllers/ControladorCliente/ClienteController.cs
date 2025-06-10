@@ -15,12 +15,14 @@ namespace PetCare.Controllers
     public class ClienteController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly ISolicitudService _solicitudService;
+        private readonly ISolicitudClienteService _solicitudClienteService;
 
-        public ClienteController(ApplicationDbContext context, ISolicitudService solicitudService)
+        public ClienteController(
+       ApplicationDbContext context,
+       ISolicitudClienteService solicitudClienteService)
         {
             _context = context;
-            _solicitudService = solicitudService;
+            _solicitudClienteService = solicitudClienteService;
         }
 
         [HttpGet("Dashboard")]
@@ -36,6 +38,25 @@ namespace PetCare.Controllers
             }
 
             return View("Cliente", viewModel); // Especifica el nombre de la vista
+        }
+
+
+        [HttpGet("PerfilCuidador/{id}")]
+        public async Task<IActionResult> PerfilCuidador(int id)
+        {
+            var cuidador = await _context.Cuidadores
+                .Include(c => c.Usuario)
+                .Include(c => c.Calificaciones)
+                    .ThenInclude(cal => cal.Cliente)
+                        .ThenInclude(cli => cli.Usuario)
+                .FirstOrDefaultAsync(c => c.CuidadorID == id);
+
+            if (cuidador == null)
+            {
+                return NotFound();
+            }
+
+            return View("PerfilCuidador", cuidador);
         }
 
         [HttpGet("{id}")]
@@ -65,13 +86,16 @@ namespace PetCare.Controllers
                 return null;
             }
 
+            // Obtener cuidadores disponibles del servicio
+            var cuidadoresDisponibles = await _solicitudClienteService.GetCuidadoresDisponibles();
+
             return new ClienteDashboardViewModel
             {
                 Cliente = cliente,
-                // Inicializamos las demás propiedades como listas vacías por ahora
-                SolicitudesPendientes = new List<Solicitud>(),
-                SolicitudesActivas = new List<Solicitud>(),
-                HistorialServicios = new List<Solicitud>(),
+                SolicitudesPendientes = await _solicitudClienteService.GetSolicitudesPendientes(cliente.ClienteID),
+                SolicitudesActivas = await _solicitudClienteService.GetSolicitudesActivas(cliente.ClienteID),
+                HistorialServicios = await _solicitudClienteService.GetHistorialServicios(cliente.ClienteID),
+                CuidadoresDisponibles = cuidadoresDisponibles ?? new List<Cuidador>()
             };
         }
     }

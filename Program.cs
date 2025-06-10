@@ -39,11 +39,20 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ISolicitudService, SolicitudService>();
 builder.Services.AddScoped<ISolicitudClienteService, SolicitudClienteService>();
+builder.Services.AddScoped<ICuidadorService, CuidadorService>();
 // Registro de estrategias
 builder.Services.AddScoped<AdminStrategy>();
 builder.Services.AddScoped<CuidadorStrategy>();
 builder.Services.AddScoped<ClienteStrategy>();
 builder.Services.AddScoped<RoleStrategyFactory>();
+
+
+builder.Services.AddLogging(configure => configure.AddConsole());
+
+// Configura el nivel de logging para diagnóstico
+builder.Logging.AddFilter("Microsoft", LogLevel.Warning)
+       .AddFilter("System", LogLevel.Warning)
+       .AddFilter("PetCare", LogLevel.Debug);
 
 builder.Services.AddSession(options =>
 {

@@ -16,6 +16,29 @@
             <div class="alert alert-info">
                 Bienvenido a tu dashboard. Pronto podrás ver aquí tus solicitudes y cuidadores favoritos.
             </div>
+
+            <h3>Cuidadores Disponibles</h3>
+            <div class="row">
+                @foreach (var cuidador in Model.CuidadoresDisponibles.Where(c => c.Disponible))
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card border-primary">
+                            <div class="card-body">
+                                <h5 class="card-title">@cuidador.Usuario.NombreCompleto</h5>
+                                <p class="card-text">
+                                    <strong>Ciudad:</strong> @cuidador.Ciudad<br>
+                                    <strong>Calificación:</strong> @cuidador.CalificacionPromedio.ToString("0.0")<br>
+                                    <strong>Tarifa por hora:</strong> @cuidador.TarifaPorHora?.ToString("C")<br>
+                                    <span class="badge bg-success">Disponible</span>
+                                </p>
+                                <a href="@Url.Action("PerfilCuidador", "Cliente", new { id = cuidador.CuidadorID })"
+                                   class="btn btn-primary">Ver Perfil</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
         </div>
     </div>
 </div>
