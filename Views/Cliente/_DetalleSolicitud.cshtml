@@ -52,4 +52,14 @@
     {
         <div class="alert alert-secondary">No se encontraron cuidadores sugeridos para esta solicitud.</div>
     }
+
+    @if ((Model.Estado == "Aceptada" || Model.Estado == "En Progreso") && Model.Cuidador != null)
+    {
+        <div class="text-end mt-3">
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chatModal">
+                <i class="bi bi-chat-left-text"></i> Chat con @Model.Cuidador.Usuario.NombreCompleto
+            </button>
+        </div>
+    }
+
 </div>

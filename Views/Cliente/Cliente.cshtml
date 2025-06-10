@@ -211,6 +211,43 @@
         }
     </script>
 
+    <script>
+        const socket = new WebSocket("ws://" + window.location.host + "/ws");
+
+        socket.onmessage = function (event) {
+            const msg = event.data;
+            const msgBox = document.createElement("div");
+            msgBox.classList.add("chat-message", "received", "mb-2");
+            msgBox.innerHTML = `
+                <div class="message-content bg-light p-2 rounded">
+                    <small class="text-muted">Otro usuario - ahora</small>
+                    <p>${msg}</p>
+                </div>`;
+            document.querySelector("#chatModal .modal-body").appendChild(msgBox);
+        };
+
+        document.querySelector("#chatModal .btn.btn-primary").addEventListener("click", () => {
+            const input = document.querySelector("#chatModal input[type='text']");
+            const message = input.value.trim();
+
+            if (message === "") return;
+
+            socket.send(message);
+
+            const msgBox = document.createElement("div");
+            msgBox.classList.add("chat-message", "sent", "mb-2");
+            msgBox.innerHTML = `
+                <div class="message-content bg-primary text-white p-2 rounded">
+                    <small class="text-white-50">Tú - ahora</small>
+                    <p>${message}</p>
+                </div>`;
+            document.querySelector("#chatModal .modal-body").appendChild(msgBox);
+
+            input.value = "";
+        });
+    </script>
+
+
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
 

@@ -62,6 +62,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromSeconds(120),
+};
+
+app.UseWebSockets(webSocketOptions);
+
+
 // Orden CORRECTO: Authentication antes de Authorization
 app.UseAuthentication();
 app.UseAuthorization();
@@ -70,5 +78,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
+
+var webSocketHandler = new PetCare.Services.Chat.WebSocketHandler();
+app.Map("/ws", async context => await webSocketHandler.HandleAsync(context));
+
 
 app.Run();
