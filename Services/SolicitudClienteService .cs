@@ -74,6 +74,33 @@ namespace PetCare.Services
                     .ThenInclude(c => c.Usuario)
                 .ToListAsync();
         }
+        public async Task<bool> CrearSolicitud(SolicitudServicioViewModel model, int clienteId)
+        {
+            try
+            {
+                var solicitud = new Solicitud
+                {
+                    ClienteID = clienteId,
+                    CuidadorID = model.CuidadorID,
+                    TipoServicio = model.TipoServicio,
+                    Descripcion = model.Descripcion,
+                    FechaHoraInicio = model.FechaHoraInicio,
+                    DuracionHoras = model.DuracionHoras,
+                    Ubicacion = model.Ubicacion,
+                    Estado = "Pendiente",
+                    FechaCreacion = DateTime.Now,
+                    FechaActualizacion = DateTime.Now
+                };
+
+                _context.Solicitudes.Add(solicitud);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         /*public async Task<IEnumerable<Cuidador>> GetCuidadoresDisponibles()
         {

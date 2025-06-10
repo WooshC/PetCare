@@ -59,6 +59,50 @@ namespace PetCare.Controllers
             return View("PerfilCuidador", cuidador);
         }
 
+
+        [HttpGet("SolicitarServicio/{cuidadorId}")]
+        public IActionResult SolicitarServicio(int cuidadorId)
+        {
+            var model = new SolicitudServicioViewModel
+            {
+                CuidadorID = cuidadorId,
+                FechaHoraInicio = DateTime.Now.AddDays(1)
+            };
+
+            // Si es AJAX, retorna vista parcial
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_SolicitudServicioPartial", model);
+            }
+
+            // Fallback normal
+            return View(model);
+        }
+
+
+        [HttpPost("SolicitarServicio")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SolicitarServicio(SolicitudServicioViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var clienteId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var success = await _solicitudClienteService.CrearSolicitud(model, clienteId);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", "Ocurrió un error al crear la solicitud");
+                return View(model);
+            }
+
+            TempData["SuccessMessage"] = "Solicitud enviada correctamente";
+            return RedirectToAction("Dashboard");
+        }
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Perfil(int id)
         {

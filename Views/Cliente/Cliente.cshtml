@@ -24,15 +24,21 @@
                     <div class="col-md-4 mb-4">
                         <div class="card border-primary">
                             <div class="card-body">
-                                <h5 class="card-title">@cuidador.Usuario.NombreCompleto</h5>
+                                <h5 class="card-title">@cuidador.Usuario?.NombreCompleto</h5>
                                 <p class="card-text">
                                     <strong>Ciudad:</strong> @cuidador.Ciudad<br>
-                                    <strong>Calificación:</strong> @cuidador.CalificacionPromedio.ToString("0.0")<br>
-                                    <strong>Tarifa por hora:</strong> @cuidador.TarifaPorHora?.ToString("C")<br>
+                                    <strong>Calificación:</strong> @(cuidador.CalificacionPromedio.ToString("0.0"))<br>
+                                    <strong>Tarifa:</strong> @(cuidador.TarifaPorHora?.ToString("C") ?? "No especificada")<br>
                                     <span class="badge bg-success">Disponible</span>
                                 </p>
-                                <a href="@Url.Action("PerfilCuidador", "Cliente", new { id = cuidador.CuidadorID })"
-                                   class="btn btn-primary">Ver Perfil</a>
+                                <div class="d-grid gap-2">
+                                    <a href="@Url.Action("PerfilCuidador", "Cliente", new { id = cuidador.CuidadorID })"
+                                       class="btn btn-outline-primary">Ver Perfil</a>
+                                    <a href="javascript:void(0);"
+                                       class="btn btn-primary btn-solicitar-servicio"
+                                       data-cuidador-id="@cuidador.CuidadorID"
+                                       data-nombre-cuidador="@cuidador.Usuario?.NombreCompleto">Solicitar Servicio</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -42,6 +48,41 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="solicitudModal" tabindex="-1" aria-labelledby="solicitudModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Solicitar Servicio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <!-- Contenido dinámico cargado vía AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.btn-solicitar-servicio').click(function () {
+                var cuidadorId = $(this).data('cuidador-id');
+                var url = '/Cliente/SolicitarServicio/' + cuidadorId;
+
+                $.get(url, function (data) {
+                    $('#modal-content').html(data);
+                    var modal = new bootstrap.Modal(document.getElementById('solicitudModal'));
+                    modal.show();
+                });
+            });
+        });
+    </script>
+}
+
 
 @section Styles {
     @await Html.PartialAsync("_StylesPartial")

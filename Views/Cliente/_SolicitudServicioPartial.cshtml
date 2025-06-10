@@ -1,0 +1,23 @@
+﻿@model PetCare.Models.SolicitudServicioViewModel
+
+<form asp-action="SolicitarServicio" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="CuidadorID" />
+
+    <div class="mb-3">
+        <label asp-for="FechaHoraInicio" class="form-label">Fecha y Hora de Inicio</label>
+        <input asp-for="FechaHoraInicio" class="form-control" type="datetime-local" step="60" />
+        <span asp-validation-for="FechaHoraInicio" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DuracionHoras" class="form-label">Duración (horas)</label>
+        <input asp-for="DuracionHoras" class="form-control" type="number" min="1" />
+        <span asp-validation-for="DuracionHoras" class="text-danger"></span>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>

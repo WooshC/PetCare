@@ -11,7 +11,7 @@ namespace PetCare.Services
         Task<bool> CancelarSolicitud(int solicitudId);
         Task<IEnumerable<Solicitud>> GetSolicitudesActivas(int clienteId);
         Task<IEnumerable<Cuidador>> GetCuidadoresDisponibles();
-
+        Task<bool> CrearSolicitud(SolicitudServicioViewModel model, int clienteId);
 
     }
 }
