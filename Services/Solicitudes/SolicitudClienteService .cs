@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace PetCare.Services
+namespace PetCare.Services.Solicitudes
 {
     public class SolicitudClienteService : ISolicitudClienteService
     {

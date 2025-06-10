@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Models;
 
-namespace PetCare.Services
+namespace PetCare.Services.AuthServices
 {
     public class CuidadorStrategy : IRoleStrategy
     {

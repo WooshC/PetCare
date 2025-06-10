@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using PetCare.Models;
 using PetCare.Models.ViewModels;
+using PetCare.Services.Solicitudes;
 
 namespace PetCare.Services
 {

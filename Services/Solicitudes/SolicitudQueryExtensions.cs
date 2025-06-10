@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Models;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace PetCare.Services
+namespace PetCare.Services.Solicitudes
 {
     public static class SolicitudQueryExtensions
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetCare.Models;
 
-namespace PetCare.Services
+namespace PetCare.Services.AuthServices
 {
     public interface IRoleStrategy
     {

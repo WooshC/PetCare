@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetCare.Data;
-using PetCare.Services;
+using PetCare.Services.AuthServices;
 using System.Threading.Tasks;
 
 namespace PetCare.Controllers

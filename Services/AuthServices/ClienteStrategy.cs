@@ -5,7 +5,7 @@ using PetCare.Models;
 using PetCare.Models.ViewModels;
 using System.Security.Claims;
 
-namespace PetCare.Services
+namespace PetCare.Services.AuthServices
 {
     public class ClienteStrategy : IRoleStrategy
     {

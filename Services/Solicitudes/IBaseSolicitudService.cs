@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using PetCare.Models;
 
-namespace PetCare.Services
+namespace PetCare.Services.Solicitudes
 {
     public interface IBaseSolicitudService
     {

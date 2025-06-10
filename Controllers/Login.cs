@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetCare.Data;
 using PetCare.Models;
-using PetCare.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using PetCare.Services.AuthServices;
 
 namespace PetCare.Controllers
 {

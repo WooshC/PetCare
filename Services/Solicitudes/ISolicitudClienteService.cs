@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using PetCare.Models;
 using PetCare.Models.ViewModels;
 
-namespace PetCare.Services
+namespace PetCare.Services.Solicitudes
 {
     public interface ISolicitudClienteService : IBaseSolicitudService
     {

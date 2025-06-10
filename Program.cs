@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Models;
 using PetCare.Services;
+using PetCare.Services.AuthServices;
+using PetCare.Services.Solicitudes;
 
 
 var builder = WebApplication.CreateBuilder(args);

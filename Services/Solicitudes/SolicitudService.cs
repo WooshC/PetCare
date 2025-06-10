@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace PetCare.Services
+namespace PetCare.Services.Solicitudes
 {
     public class SolicitudService : ISolicitudService
     {
@@ -61,8 +61,8 @@ namespace PetCare.Services
                 .IncludeClienteUsuario()
                 .Where(s => s.CuidadorID == cuidadorId &&
                        (s.Estado == "Fuera de Tiempo" ||
-                        (s.Estado == "En Progreso" &&
-                         s.FechaHoraInicio.AddHours(s.DuracionHoras) < ahora)))
+                        s.Estado == "En Progreso" &&
+                         s.FechaHoraInicio.AddHours(s.DuracionHoras) < ahora))
                 .OrderByDescending(s => s.FechaHoraInicio)
                 .ToListAsync();
 

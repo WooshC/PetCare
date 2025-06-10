@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PetCare.Services
+namespace PetCare.Services.AuthServices
 {
     public class RoleStrategyFactory
     {

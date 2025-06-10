@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using PetCare.Data;
 using PetCare.Models;
-using PetCare.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using PetCare.Services.AuthServices;
 
 namespace PetCare.Controllers
 {

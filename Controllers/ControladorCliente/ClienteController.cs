@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using PetCare.Models.ViewModels;
-using PetCare.Services;
+using PetCare.Services.Solicitudes;
 
 namespace PetCare.Controllers
 {
