@@ -63,6 +63,36 @@ namespace PetCare.Controllers
             return RedirectToAction("Dashboard");
         }
 
+        [HttpPost("FinalizarSolicitud/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FinalizarSolicitud(int id)
+        {
+            var solicitud = await _context.Solicitudes
+                .FirstOrDefaultAsync(s => s.SolicitudID == id);
+
+            if (solicitud == null)
+            {
+                return NotFound();
+            }
+
+            // Verificar que la solicitud esté en un estado válido para finalizar
+            if (solicitud.Estado != "En Progreso" && solicitud.Estado != "Fuera de Tiempo")
+            {
+                TempData["ErrorMessage"] = "Solo se pueden finalizar servicios en progreso o fuera de tiempo";
+                return RedirectToAction("Dashboard");
+            }
+
+            var result = await _solicitudService.CambiarEstadoSolicitud(id, "Finalizada");
+            if (!result)
+            {
+                TempData["ErrorMessage"] = "Error al finalizar la solicitud";
+                return RedirectToAction("Dashboard");
+            }
+
+            TempData["SuccessMessage"] = "Servicio finalizado correctamente";
+            return RedirectToAction("Dashboard");
+        }
+
         private async Task<CuidadorDashboardViewModel> ObtenerViewModel(int usuarioId)
         {
             // Mensaje de depuración para el inicio del método
