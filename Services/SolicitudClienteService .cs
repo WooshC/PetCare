@@ -29,23 +29,31 @@ namespace PetCare.Services
 
         public async Task<IEnumerable<Solicitud>> GetSolicitudesPendientes(int clienteId)
         {
-            return await _context.Solicitudes
+            return await GetSolicitudesPendientesQuery(clienteId).ToListAsync();
+        }
+
+        private IQueryable<Solicitud> GetSolicitudesPendientesQuery(int clienteId)
+        {
+            return _context.Solicitudes
                 .Include(s => s.Cuidador)
                     .ThenInclude(c => c.Usuario)
                 .Where(s => s.ClienteID == clienteId && s.Estado == "Pendiente")
-                .OrderBy(s => s.FechaHoraInicio)
-                .ToListAsync();
+                .OrderBy(s => s.FechaHoraInicio);
         }
 
         public async Task<IEnumerable<Solicitud>> GetHistorialServicios(int clienteId)
         {
-            return await _context.Solicitudes
+            return await GetHistorialServiciosQuery(clienteId).ToListAsync();
+        }
+
+        private IQueryable<Solicitud> GetHistorialServiciosQuery(int clienteId)
+        {
+            return _context.Solicitudes
                 .Include(s => s.Cuidador)
                     .ThenInclude(c => c.Usuario)
                 .Where(s => s.ClienteID == clienteId && (s.Estado == "Finalizada" || s.Estado == "Rechazada"))
                 .OrderByDescending(s => s.FechaHoraInicio)
-                .Take(10) // Limitar a los últimos 10 servicios
-                .ToListAsync();
+                .Take(10);
         }
 
         public async Task<bool> CancelarSolicitud(int solicitudId)
@@ -67,31 +75,23 @@ namespace PetCare.Services
 
         public async Task<IEnumerable<Solicitud>> GetSolicitudesActivas(int clienteId)
         {
-            return await _context.Solicitudes
+            return await GetSolicitudesActivasQuery(clienteId).ToListAsync();
+        }
+
+        private IQueryable<Solicitud> GetSolicitudesActivasQuery(int clienteId)
+        {
+            return _context.Solicitudes
                 .Where(s => s.ClienteID == clienteId &&
                       (s.Estado == "Aceptada" || s.Estado == "En Progreso"))
                 .Include(s => s.Cuidador)
-                    .ThenInclude(c => c.Usuario)
-                .ToListAsync();
+                    .ThenInclude(c => c.Usuario);
         }
+
         public async Task<bool> CrearSolicitud(SolicitudServicioViewModel model, int clienteId)
         {
             try
             {
-                var solicitud = new Solicitud
-                {
-                    ClienteID = clienteId,
-                    CuidadorID = model.CuidadorID,
-                    TipoServicio = model.TipoServicio,
-                    Descripcion = model.Descripcion,
-                    FechaHoraInicio = model.FechaHoraInicio,
-                    DuracionHoras = model.DuracionHoras,
-                    Ubicacion = model.Ubicacion,
-                    Estado = "Pendiente",
-                    FechaCreacion = DateTime.Now,
-                    FechaActualizacion = DateTime.Now
-                };
-
+                var solicitud = CrearSolicitudEntity(model, clienteId);
                 _context.Solicitudes.Add(solicitud);
                 await _context.SaveChangesAsync();
                 return true;
@@ -100,6 +100,23 @@ namespace PetCare.Services
             {
                 return false;
             }
+        }
+
+        private Solicitud CrearSolicitudEntity(SolicitudServicioViewModel model, int clienteId)
+        {
+            return new Solicitud
+            {
+                ClienteID = clienteId,
+                CuidadorID = model.CuidadorID,
+                TipoServicio = model.TipoServicio,
+                Descripcion = model.Descripcion,
+                FechaHoraInicio = model.FechaHoraInicio,
+                DuracionHoras = model.DuracionHoras,
+                Ubicacion = model.Ubicacion,
+                Estado = "Pendiente",
+                FechaCreacion = DateTime.Now,
+                FechaActualizacion = DateTime.Now
+            };
         }
 
         /*public async Task<IEnumerable<Cuidador>> GetCuidadoresDisponibles()
