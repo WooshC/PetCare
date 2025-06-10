@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using PetCare.Models;
+using PetCare.Models.ViewModels;
 
 namespace PetCare.Services
 {
-    public interface ISolicitudClienteService
+    public interface ISolicitudClienteService : IBaseSolicitudService
     {
         Task<IEnumerable<Solicitud>> GetSolicitudesPendientes(int clienteId);
         Task<IEnumerable<Solicitud>> GetHistorialServicios(int clienteId);
@@ -12,6 +13,5 @@ namespace PetCare.Services
         Task<IEnumerable<Solicitud>> GetSolicitudesActivas(int clienteId);
         Task<IEnumerable<Cuidador>> GetCuidadoresDisponibles();
         Task<bool> CrearSolicitud(SolicitudServicioViewModel model, int clienteId);
-
     }
 }

@@ -1,11 +1,10 @@
 ﻿// Services/SolicitudService.cs
 using PetCare.Data;
 using PetCare.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PetCare.Models.ViewModels;
 
 namespace PetCare.Services
 {
@@ -20,23 +19,15 @@ namespace PetCare.Services
 
         public async Task<IEnumerable<Solicitud>> GetSolicitudesPendientes(int cuidadorId)
         {
-            return await _context.Solicitudes
-                .Include(s => s.Cliente)
-                    .ThenInclude(c => c.Usuario)
-                .Where(s => s.CuidadorID == cuidadorId && s.Estado == "Pendiente")
-                .OrderBy(s => s.FechaHoraInicio)
-                .ToListAsync();
+            return await _context.GetSolicitudesByEstado(cuidadorId, new[] { "Pendiente" });
         }
 
         public async Task<IEnumerable<Solicitud>> GetHistorialServicios(int cuidadorId)
         {
-            return await _context.Solicitudes
-                .Include(s => s.Cliente)
-                    .ThenInclude(c => c.Usuario)
-                .Where(s => s.CuidadorID == cuidadorId && (s.Estado == "Finalizada" || s.Estado == "Rechazada"))
-                .OrderByDescending(s => s.FechaHoraInicio)
-                .Take(10) // Limitar a los últimos 10 servicios
-                .ToListAsync();
+            return await _context.GetSolicitudesByEstado(
+                cuidadorId,
+                new[] { "Finalizada", "Rechazada" },
+                take: 10);
         }
 
         public async Task<bool> CambiarEstadoSolicitud(int solicitudId, string nuevoEstado)
@@ -55,28 +46,39 @@ namespace PetCare.Services
 
             return true;
         }
+
         public async Task<IEnumerable<Solicitud>> GetSolicitudesActivas(int cuidadorId)
         {
-            return await _context.Solicitudes
-                .Where(s => s.CuidadorID == cuidadorId && (s.Estado == "Aceptada" || s.Estado == "En Progreso"))
-                .Include(s => s.Cliente)
-                    .ThenInclude(c => c.Usuario)
-                .ToListAsync();
+            return await _context.GetSolicitudesByEstado(
+                cuidadorId,
+                new[] { "Aceptada", "En Progreso" });
         }
 
         public async Task<IEnumerable<Solicitud>> GetSolicitudesFueraDeTiempo(int cuidadorId)
         {
             var ahora = DateTime.Now;
-
-            return await _context.Solicitudes
-                .Include(s => s.Cliente)
-                    .ThenInclude(c => c.Usuario)
+            var solicitudes = await _context.Solicitudes
+                .IncludeClienteUsuario()
                 .Where(s => s.CuidadorID == cuidadorId &&
-                       (s.Estado == "Fuera de Tiempo" || // Solicitudes ya marcadas
-                        (s.Estado == "En Progreso" &&    // O solicitudes en progreso que deben marcarse
+                       (s.Estado == "Fuera de Tiempo" ||
+                        (s.Estado == "En Progreso" &&
                          s.FechaHoraInicio.AddHours(s.DuracionHoras) < ahora)))
                 .OrderByDescending(s => s.FechaHoraInicio)
                 .ToListAsync();
+
+            // Actualizar estado de solicitudes fuera de tiempo
+            foreach (var solicitud in solicitudes.Where(s => s.Estado == "En Progreso"))
+            {
+                solicitud.Estado = "Fuera de Tiempo";
+                solicitud.FechaActualizacion = ahora;
+            }
+
+            if (solicitudes.Any(s => s.Estado == "En Progreso"))
+            {
+                await _context.SaveChangesAsync();
+            }
+
+            return solicitudes;
         }
     }
 }

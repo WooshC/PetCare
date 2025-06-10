@@ -5,13 +5,9 @@ using PetCare.Models.ViewModels;
 
 namespace PetCare.Services
 {
-    public interface ISolicitudService
+    public interface ISolicitudService : IBaseSolicitudService
     {
-        Task<IEnumerable<Solicitud>> GetSolicitudesPendientes(int cuidadorId);
-        Task<IEnumerable<Solicitud>> GetHistorialServicios(int cuidadorId);
         Task<bool> CambiarEstadoSolicitud(int solicitudId, string nuevoEstado);
-        Task<IEnumerable<Solicitud>> GetSolicitudesActivas(int cuidadorId);
-
         Task<IEnumerable<Solicitud>> GetSolicitudesFueraDeTiempo(int cuidadorId);
     }
 }
