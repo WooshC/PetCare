@@ -10,7 +10,6 @@
     <div class="d-flex justify-content-end mt-3 gap-2">
         @if (solicitudId != null)
         {
-            <p class="text-danger small">Debug: SolicitudID = @solicitudId, CuidadorID = @Model.CuidadorID</p>
 
             <form action="/Cliente/AsignarCuidador" method="post" class="d-inline">
                 <input type="hidden" name="solicitudId" value="@solicitudId" />
