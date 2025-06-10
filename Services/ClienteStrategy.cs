@@ -30,15 +30,29 @@ namespace PetCare.Services
             foreach (var solicitud in cliente.Solicitudes
                 .Where(s => s.Estado == "Pendiente" || s.Estado == "Aceptada"))
             {
+                if (solicitud.HoraDeseada == null)
+                    continue;
+
+                var inicioDeseado = solicitud.FechaHoraInicio.Date + solicitud.HoraDeseada.Value;
+                var finDeseado = inicioDeseado.AddHours(solicitud.DuracionHoras);
+
+                // Traer a memoria todas las solicitudes aceptadas con HoraDeseada
+                var solicitudesAceptadas = await context.Solicitudes
+                    .Where(s => s.Estado == "Aceptada" && s.HoraDeseada != null)
+                    .ToListAsync();
+
                 var sugeridos = todosLosCuidadores
-                    .Where(c => !context.Solicitudes.Any(s =>
-                        s.CuidadorID == c.CuidadorID &&
-                        s.ClienteID == cliente.ClienteID &&
-                        s.Estado == "Aceptada"))
-                    .ToList();
+                    .Where(c =>
+                        !solicitudesAceptadas.Any(s =>
+                            s.CuidadorID == c.CuidadorID &&
+                            (s.FechaHoraInicio.Date + s.HoraDeseada.Value) < finDeseado &&
+                            (s.FechaHoraInicio.Date + s.HoraDeseada.Value).AddHours(s.DuracionHoras) > inicioDeseado
+                        )
+                    ).ToList();
 
                 solicitud.CuidadoresRelacionados = sugeridos;
             }
+
 
             return controller.View("~/Views/Cliente/Cliente.cshtml", cliente);
         }
